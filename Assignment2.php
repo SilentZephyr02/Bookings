@@ -200,7 +200,7 @@ function Bookings_CRUD(){
     echo '<h3>Bookings Page</h3>';
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Add Neww</a></h2>
+        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $bookingdata = $_POST;
