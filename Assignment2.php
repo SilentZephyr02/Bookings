@@ -558,10 +558,10 @@ function Room_list() {
 		</tr>
 		</thead>
 		<tbody>';
-        foreach ($allromms as $rooms) {
-            $edit_link = '?page=Rooms&command=edit';
-            $view_link = '?page=Rooms&command=edit';
-            $delete_link = '?page=Rooms&command=delete';
+        foreach ($allrooms as $rooms) {
+            $edit_link = '?page=rooms&command=edit';
+            $view_link = '?page=rooms&command=edit';
+            $delete_link = '?page=rooms&command=delete';
 
             echo '<tr>';
             echo '<td>' . $room->room_number . '</td>';
