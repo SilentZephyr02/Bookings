@@ -1,4 +1,5 @@
 <?php
+//=======================================================================================
 function Accounts_CRUD() {
     echo '<h3>Contents of the POST data</h3>';
     pr($_POST);
@@ -57,7 +58,7 @@ function Accounts_CRUD() {
 	}
 	echo '</div>';
 }
-
+//=======================================================================================
 function Accounts_view($accountid) {
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM ACCOUNTS_TABLE");
@@ -72,7 +73,7 @@ function Accounts_view($accountid) {
     echo $row->last_name;
     echo '<p><a href="?page=accounts">&laquo; Back to List</p>';
 }
-
+//=======================================================================================
 function Account_delete($accountid) {
     global $wpdb;
     $results = $wpdb->query($wpdb->prepare("DELETE FROM ACCOUNTS_TABLE WHERE id=%s",$accountid));
@@ -81,8 +82,7 @@ function Account_delete($accountid) {
     }
     return $msg;
 }
-
-
+//=======================================================================================
 function Account_update($account_data) {
     global $wpdb, $current_user;
 
@@ -101,8 +101,7 @@ function Account_update($account_data) {
     $msg = "Account ".$accountdata['hid']. "has been updated";
     return $msg;
 }
-
-
+//=======================================================================================
 function Account_insert($account_data) {
     global $wpdb, $current_user;
 
@@ -121,9 +120,7 @@ function Account_insert($account_data) {
         $msg = "Account for ".$account_data['first_name']." has been created";
         return $msg;
 }
-
-
-
+//=======================================================================================
 function Account_list() {
     global $wpdb, $current_user;
     $query = "SELECT id, first_name, last_name, phone_number FROM ACCOUNTS_TABLE ORDER BY last_name DESC";
@@ -161,7 +158,7 @@ function Account_list() {
 			function doDelete() { if (!confirm('Are you sure?')) return false; }
 		  </script>";
 }
-
+//=======================================================================================
 function Account_form($command, $accountid = null) {
     global $wpdb;
     if ($command == 'insert') {
@@ -192,6 +189,8 @@ function Account_form($command, $accountid = null) {
     </form>';
     echo '<p> <a href="?page=accounts">&laquo; Back To Accounts List</p>';
 }
+//=======================================================================================
+
 Accounts_CRUD();
 
 ?>

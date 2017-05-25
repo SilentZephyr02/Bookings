@@ -1,8 +1,9 @@
 <?php
+//=======================================================================================
 function Rooms_CRUD() {
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Rooms <a href="?page=rooms&command=new" class="add-new-h2">AdSdd New</a></h2>
+        <h2>Rooms <a href="?page=rooms&command=new" class="add-new-h2">Add New</a></h2>
         <div style="clear: both"></div>';
     
     $roomdata = $_POST;
@@ -51,7 +52,7 @@ function Rooms_CRUD() {
         }
         echo '</div>';
 }
-
+//=======================================================================================
 function Rooms_view($room_number) {
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM ROOMS_TABLE");
@@ -66,7 +67,7 @@ function Rooms_view($room_number) {
     echo $row->room_type;
     echo '<p><a href="?page=rooms">&laquo; Back to the List</p>';
 }
-
+//=======================================================================================
 function Room_delete($room_number) {
     global $wpdb;
 
@@ -76,7 +77,7 @@ function Room_delete($room_number) {
     }
     return $msg;
 }
-
+//=======================================================================================
 function Room_insert($roomdata) {
     global $wpdb;
     $wpdb->insert( 'ROOMS_TABLE',
@@ -89,7 +90,7 @@ function Room_insert($roomdata) {
         $msg = "Room ".$roomdata['room_number']."has been made";
         return $msg;
 }
-
+//=======================================================================================
 function Room_update($roomdata) {
     global $wpdb, $current_user;
     $wpdb->update('ROOMS_TABLE',
@@ -100,7 +101,7 @@ function Room_update($roomdata) {
     $msg = "Room Number ".$roomdata['room_number']."has been updated";
     return $msg;
 }
-
+//=======================================================================================
 function Room_list() {
     global $wpdb;
     $query = "SELECT room_number, room_type, berth, price FROM ROOMS_TABLE ORDER BY room_number DESC";
@@ -137,7 +138,7 @@ function Room_list() {
             }
             echo '<div class="row-actions">';
 }
-
+//=======================================================================================
 function Room_form($command, $room_number = null) {
     global $wpdb;
     if ($command == 'insert') {
@@ -167,6 +168,8 @@ function Room_form($command, $room_number = null) {
 		</form>';
    echo '<p><a href="?page=ASS2simple">&laquo; back to list</p>';	
 }
+//========================================================================================
 
 Rooms_CRUD();
+
 ?>
