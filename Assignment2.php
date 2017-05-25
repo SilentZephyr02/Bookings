@@ -1,7 +1,7 @@
 
 <?php
 /*
-Plugin Name: Assignment 2 MC and JY
+Plugin Name: Assignment 2 Mitch is awesome
 Plugin URI: http://farcue.com
 Description: a failed attempt at a booking calender
 Author: Mitch and John
