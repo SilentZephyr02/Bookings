@@ -652,7 +652,7 @@ function Room_form($command, $room_number = null) {
     if ($command =='update') {
         $account = $wpdb->get_row("SELECT * FROM ROOMS_TABLE ORDER BY room_number DESC");
     }
-    echo '<form name="rooms_form" method="post" action="?page=Rooms">
+    echo '<form name="rooms_form" method="post" action="?page=rooms">
 		<input type="hidden" name="command" value="'.$command.'"/>
 
 		<p>Room Number:<br/>
