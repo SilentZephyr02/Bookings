@@ -2,11 +2,11 @@
 <?php
 /*
 Plugin Name: Booking_Assignment
-Plugin URI: http://farcue.com
-Description: a failed attempt at a booking calender
+Plugin URI: http://google.com
+Description: A Booking Calender
 Author: Mitch and John
 Version: 1.0
-Author URI: http://fbgm.com
+Author URI: http://google.com
 Last update: 9th May 2017
 */
 
@@ -163,7 +163,7 @@ function Bookings_CRUD(){
     echo '<h3>Bookings Page</h3>';
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Addd Neww</a></h2>
+        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $bookingdata = $_POST;
