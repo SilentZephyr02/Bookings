@@ -108,8 +108,8 @@ function Assignment2settingslink($links) {
 function Assignment2_menu() {
     add_menu_page( 'Assignment2Settings', 'Bookings' , 'read' , 'Bookings','Bookings_CRUD' );
 
-    add_submenu_page( 'Bookings', 'Manage Account'   , 'Manage Account'  , 'read'            , 'accounts', 'WAD_plugin_menu_includes'   );
-    add_submenu_page( 'Bookings', 'Manage Rooms'     , 'Manage Rooms'    , 'manage_options'  , 'rooms'   , 'WAD_plugin_menu_includes'      );
+    add_submenu_page( 'Bookings', 'Manage Account'   , 'Manage Account'  , 'read'            , 'Accounts', 'WAD_plugin_menu_includes'   );
+    add_submenu_page( 'Bookings', 'Manage Rooms'     , 'Manage Rooms'    , 'manage_options'  , 'Rooms'   , 'WAD_plugin_menu_includes'      );
 }
 
 //=======================================================================================
