@@ -35,6 +35,14 @@ function Accounts_CRUD() {
             $msg = Account_form('insert',null);
         break;
 
+        case 'errorEdit':
+            $msg = Account_form('insert',$accountid);
+        break;
+
+        case 'errorNew':
+            $msg = Account_form('insert',null);
+        break;
+
         case 'delete':
             $msg = Account_delete($accountid);
             $command = '';
@@ -47,7 +55,12 @@ function Accounts_CRUD() {
 
         case 'insert':
             $msg = Account_insert($accountdata);
+            if(is_array($msg)){
+                pr($msg);
+                $command = 'errorNew';
+            }else{
             $command = '';
+            }
         break;
     }
 
@@ -85,11 +98,23 @@ function Account_delete($accountid) {
 //=======================================================================================
 function Account_update($account_data) {
     global $wpdb, $current_user;
-
-    if(preg_match('/^\d+$/',$account_data['phone_number'])) {
-        echo "Phone Number is valid";
-    } else {
-        return "Phone Number is not valid";
+    $error;
+    /*
+    if(!(filter_var($account_data['first_name'], FILTER_VALIDATE_STRING)){
+        $error[]="first_name";
+    }
+    if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
+        $error[]="last_name";
+    }
+    */
+    if(!preg_match('/^\d{7,15}$/',$account_data['address'])) {
+        $error[]="address";    
+    }
+    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['phone_number'])) {
+        $error[]="phone_number";
+    }
+    if(!empty($error)){
+        return $error;
     }
 
     $wpdb->update('ACCOUNTS_TABLE',
@@ -104,11 +129,23 @@ function Account_update($account_data) {
 //=======================================================================================
 function Account_insert($account_data) {
     global $wpdb, $current_user;
-
-    if(preg_match('/^\d+$/',$account_data['phone_number'])) {
-        echo "Phone Number is vadlid";
-    } else {
-        return "Phone Number is not valid";
+    $error;
+    /*
+    if(!(filter_var($account_data['first_name'], FILTER_VALIDATE_STRING)){
+        $error[]="first_name";
+    }
+    if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
+        $error[]="last_name";
+    }
+    */
+    if(!preg_match('/^\d{7,15}$/',$account_data['address'])) {
+        $error[]="address";    
+    }
+    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['phone_number'])) {
+        $error[]="phone_number";
+    }
+    if(!empty($error)){
+        return $error;
     }
 
     $wpdb->insert( 'ACCOUNTS_TABLE',
