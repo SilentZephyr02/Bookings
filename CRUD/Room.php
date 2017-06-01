@@ -3,7 +3,7 @@
 function Rooms_CRUD() {
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Rooms <a href="?page=rooms&command=new" class="add-new-h2">Add New</a></h2>
+        <h2>Rooms <a href="?page=Rooms&command=new" class="add-new-h2">Add New</a></h2>
         <div style="clear: both"></div>';
     
     $roomdata = $_POST;
@@ -48,7 +48,7 @@ function Rooms_CRUD() {
         }
         if (empty($command)) Room_list();
         if (!empty($msg)) {
-            echo '<p><a href="?page=rooms">Back to the Rooms List </a></p> Message: '.$msg;
+            echo '<p><a href="?page=Rooms">Back to the Rooms List </a></p> Message: '.$msg;
         }
         echo '</div>';
 }
@@ -65,7 +65,7 @@ function Rooms_view($room_number) {
     echo 'Room Type:';
     echo '<br />';
     echo $row->room_type;
-    echo '<p><a href="?page=rooms">&laquo; Back to the List</p>';
+    echo '<p><a href="?page=Rooms">&laquo; Back to the List</p>';
 }
 //=======================================================================================
 function Room_delete($room_number) {
@@ -117,9 +117,9 @@ function Room_list() {
 		</thead>
 		<tbody>';
         foreach ($allrooms as $rooms) {
-            $edit_link = '?page=rooms&command=edit';
-            $view_link = '?page=rooms&command=edit';
-            $delete_link = '?page=rooms&command=delete';
+            $edit_link = '?page=Rooms&command=edit';
+            $view_link = '?page=Rooms&command=edit';
+            $delete_link = '?page=Rooms&command=delete';
 
             echo '<tr>';
             echo '<td>' . $room->room_number . '</td>';
@@ -151,7 +151,7 @@ function Room_form($command, $room_number = null) {
     if ($command =='update') {
         $account = $wpdb->get_row("SELECT * FROM ROOMS_TABLE ORDER BY room_number DESC");
     }
-    echo '<form name="rooms_form" method="post" action="?page=rooms">
+    echo '<form name="rooms_form" method="post" action="?page=Rooms">
 		<input type="hidden" name="command" value="'.$command.'"/>
 
 		<p>Room Number:<br/>
