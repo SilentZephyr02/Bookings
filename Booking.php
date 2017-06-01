@@ -29,8 +29,18 @@ add_shortcode('displayAccountsTable', 'display_accounts_table');
 add_shortcode('displayBookingTable', 'display_booking_table');
 add_shortcode('displayRoomsTable', 'display_rooms_table');
 add_action('admin_menu' , 'Assignment2_menu');
+add_action( 'wp_enqueue_scripts', 'load_scripts' );
 //=======================================================================================
+function load_scripts() {
+    wp_enqueue_script( 'jquery' );
+     wp_enqueue_style( 'WAD11', plugins_url('css/WAD11.css',__FILE__));
+     wp_enqueue_script( 'jquery-ui-datepicker');
+     wp_enqueue_script( 'json2' );
+}
 
+
+
+//=======================================================
 function Assignment2install () {
     global $wpdb;
     global $Assignment2_dbversion;
@@ -163,7 +173,7 @@ function Bookings_CRUD(){
     echo '<h3>Bookings Page</h3>';
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Add New</a></h2>
+        <h2>Bookings <a href="?page=Bookings&command=new" class="add-new">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $bookingdata = $_POST;
@@ -212,7 +222,7 @@ function Bookings_CRUD(){
     
     if(empty($command)) Bookings_list();
     if (!empty($msg)) {
-        echo '<p><a href="?page=bookings">Back to the Bookings list</a></p> Message: ' .$msg;   
+        echo '<p><a href="?page=Bookings">Back to the Bookings list</a></p> Message: ' .$msg;   
     }
     echo '</div>';
 }
@@ -232,7 +242,7 @@ function Bookings_view($bookingaccount_number) {
     echo 'Date Of Arrival';
     echo '<br />';
     echo $row->date_of_arrival;
-    echo '<p><a href="?page=bookings">&laquo; Back to List</p>';
+    echo '<p><a href="?page=Bookings">&laquo; Back to List</p>';
 }
 
 
@@ -324,6 +334,13 @@ function Bookings_list() {
 
 function Booking_form($command, $bookingaccount_number = null) {
     global $wpdb;
+    ?> <script>
+    jQuery(function() {
+		jQuery( "#dateofarrival" ).datepicker();
+		jQuery( "#lengthofstay" ).datepicker();
+    });
+    </script>
+    <?php
     if ($command == 'insert') {
         $booking->date_made = '';
         $booking->date_of_arrival = '';
@@ -339,15 +356,15 @@ function Booking_form($command, $bookingaccount_number = null) {
     <input type="hidden" name="command" value="'.$command.'"/>
     <input type="date" name="date_made" value="'.$booking->date_made.'"/>
     <p>Date of Arrival<br />
-    <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text"/>
+    <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Length Of Stay<br/>
-    <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text"/>
+    <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text" id="length_of_stay"/>
     <p>Reservation Of Booking<br/>
     <input type="text" name="reservation_or_booking" value="'.$booking->reservation_or_booking.'" size="20" class="large-text"/>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>
     </form>';
     echo '<p><a href="?page=Bookings">&laquo Back To List</p>';
-}
 
+}
 ?>
