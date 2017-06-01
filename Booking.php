@@ -109,7 +109,7 @@ function Assignment2_menu() {
     add_menu_page( 'Assignment2Settings', 'Bookings' , 'read' , 'Bookings','Bookings_CRUD' );
 
     add_submenu_page( 'Bookings', 'Manage Account'   , 'Manage Account'  , 'read'            , 'Accounts', 'WAD_plugin_menu_includes'   );
-    add_submenu_page( 'Bookings', 'Manage Rooms'     , 'Manage Rooms'    , 'manage_options'  , 'Rooms'   , 'WAD_plugin_menu_includes'      );
+    add_submenu_page( 'Bookings', 'Manage Rooms'     , 'Manage Rooms'    , 'manage_options'  , 'Rooms'   , 'WAD_plugin_menu_includes'   );
 }
 
 //=======================================================================================
@@ -119,7 +119,7 @@ function WAD_plugin_menu_includes() {
         switch ($current_page) {
             case 'Assignment2': Bookings_CRUD();  //default
                 break;
-            case 'accounts': include('CRUD/Accounts.php');
+            case 'Accounts': include('CRUD/Accounts.php');
                 break;
             case 'Rooms': include('CRUD/Room.php');
         }
@@ -170,13 +170,13 @@ function display_rooms_table() {
 
 function Bookings_CRUD(){
     echo '<h3>Bookings Page</h3>';
+    echo '<h3>Contents of the POST data</h3>';
+    pr($_POST);
+    echo '<h3>Contents of the REQUEST data</h3>';
+    pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-<<<<<<< HEAD
-        <h2>Bookings <a href="?page=bookings&command=new" class="add-new">Add New</a></h2>
-=======
-        <h2>Bookings <a href="?page=Bookings&command=new" class="add-new">Add New</a></h2>
->>>>>>> 8e2450a88a6ebbef4459553c5d1cd41625835503
+        <h2>Bookings <a href="?page=Bookings&command=new" class="add-new-h2">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $bookingdata = $_POST;

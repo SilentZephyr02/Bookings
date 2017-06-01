@@ -1,6 +1,10 @@
 <?php
 //=======================================================================================
 function Rooms_CRUD() {
+    echo '<h3>Contents of the POST data</h3>';
+    pr($_POST);
+    echo '<h3>Contents of the REQUEST data</h3>';
+    pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
         <h2>Rooms <a href="?page=Rooms&command=new" class="add-new-h2">Add New</a></h2>
@@ -123,20 +127,22 @@ function Room_list() {
 
             echo '<tr>';
             echo '<td>' . $room->room_number . '</td>';
+
             echo '<td><strong><a href="'.$edit_link.'" title="Edit This Room">' . $room->room_type . '</a></strong>';
             echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
             echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
-            echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
+            echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick="return doDelete();">Trash</a></span>';
             echo'</div>';
             echo '</td>';
+
             echo '<td>' . $room->berth . '</td>';
             echo '<td>$' . $booking->price . '</td>';
-            echo '</tbody></table>';
-            echo "<script type='text/javascript'>
-                        function doDelete() { if (!confirm('Are you sure?')) return false; }
-                    </script>";
-            }
-            echo '<div class="row-actions">';
+        }
+        echo '</tbody></table>';
+
+	echo "<script type='text/javascript'>
+			function doDelete() { if (!confirm('Are you sure?')) return false; }
+		  </script>";
 }
 //=======================================================================================
 function Room_form($command, $room_number = null) {

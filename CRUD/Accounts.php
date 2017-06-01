@@ -7,7 +7,7 @@ function Accounts_CRUD() {
     pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Accounts <a href="?page=accounts&command=new" class="add-new-h2">Add New</a></h2>
+        <h2>Accounts <a href="?page=Accounts&command=new" class="add-new-h2">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $accountdata = $_POST;
@@ -84,7 +84,7 @@ function Accounts_view($accountid) {
     echo 'Last Name:';
     echo '<br />';
     echo $row->last_name;
-    echo '<p><a href="?page=accounts">&laquo; Back to List</p>';
+    echo '<p><a href="?page=Accounts">&laquo; Back to List</p>';
 }
 //=======================================================================================
 function Account_delete($accountid) {
@@ -137,7 +137,7 @@ function Account_insert($account_data) {
     if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
         $error[]="last_name";
     }
-    */
+    
     if(!preg_match('/^\d{7,15}$/',$account_data['address'])) {
         $error[]="address";    
     }
@@ -147,6 +147,7 @@ function Account_insert($account_data) {
     if(!empty($error)){
         return $error;
     }
+    */
 
     $wpdb->insert( 'ACCOUNTS_TABLE',
     array(
@@ -173,19 +174,21 @@ function Account_list() {
 		</thead>
 		<tbody>';
         foreach ($allaccounts as $account) {
-            $edit_link = '?page=accounts&id=' . $account->id . '&command=edit';
-            $view_link = '?page=accounts&id=' . $account->id . '&command=view';
-            $delete_link = '?page=accounts&id=' . $account->id . '&command=delete';
+            $edit_link = '?page=Accounts&id=' . $account->id . '&command=edit';
+            $view_link = '?page=Accounts&id=' . $account->id . '&command=view';
+            $delete_link = '?page=Accounts&id=' . $account->id . '&command=delete';
 
             echo '<tr>';
             echo '<td>' . $account->id . '</td>';
+
             echo '<td><strong><a href="'.$edit_link.'" title="Edit This Account">' . $account->first_name . '</a></strong>';
             echo '<div class="row-actions">';
             echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
             echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
             echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick="return doDelete();">Trash</a></span>';
-            echo'</div>';
+            echo'</div>';            
             echo '</td>';
+            
             echo '<td>' . $account->last_name . '</td>';
             echo '<td>' . $account->phone_number . '</td></tr>';
         }
@@ -208,7 +211,7 @@ function Account_form($command, $accountid = null) {
     if ($command == 'update') {
         $account = $wpdb->get_row("SELECT * FROM ACCOUNTS_TABLE WHERE id = '$accountid'");
     }
-    echo '<form name="Account_form" method="post" action="?page=accounts">
+    echo '<form name="Account_form" method="post" action="?page=Accounts">
     <input type="hidden" name="hid" value="'.$accountid.'"/>
     <input type="hidden" name="command" value="'.$command.'"/>
 
@@ -224,7 +227,7 @@ function Account_form($command, $accountid = null) {
     <hr/>
     <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
     </form>';
-    echo '<p> <a href="?page=accounts">&laquo; Back To Accounts List</p>';
+    echo '<p> <a href="?page=Accounts">&laquo; Back To Accounts List</p>';
 }
 //=======================================================================================
 
