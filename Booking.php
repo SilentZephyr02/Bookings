@@ -32,7 +32,6 @@ add_action('admin_menu' , 'Assignment2_menu');
 add_action( 'wp_enqueue_scripts', 'load_scripts' );
 //=======================================================================================
 function load_scripts() {
-    wp_enqueue_script( 'jquery' );
      wp_enqueue_style( 'WAD11', plugins_url('css/WAD11.css',__FILE__));
      wp_enqueue_script( 'jquery-ui-datepicker');
      wp_enqueue_script( 'json2' );
@@ -63,7 +62,7 @@ function Assignment2install () {
             account_number int(11) NOT NULL,
             date_made date NOT NULL,
             date_of_arrival date NOT NULL,
-            length_of_stay int(11) NOT NULL,
+            length_of_stay date NOT NULL,
             reservation_or_booking text NOT NULL,
             room_number int NOT NULL,
             list_of_extras text NOT NULL,
@@ -269,7 +268,7 @@ function Booking_update($bookingdata) {
     global $wpdb, $current_user;
     $wpdb->update('BOOKINGS_TABLE',
         array( 'date_of_arrival' => date("d-m-Y"),
-        'length_of_stay' => stripslashes_deep($bookingdata['length_of_stay']),
+        'length_of_stay' => date("d-m-Y"),
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
         $msg = "Booking on ".$bookingdata['date_of_arrival']. "has been updated.";
@@ -286,7 +285,7 @@ function Booking_insert($bookingdata) {
         'account_number' => $bookingdata['account_number'],
         'date_made' => date("d-m-y"),
         'date_of_arrival' => date("d-m-y"),
-        'length_of_stay' => $bookingdata['length_of_stay'],
+        'length_of_stay' => date("d-m-Y"),
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'room_number' => $bookingdata['room_number'],
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
@@ -340,8 +339,8 @@ function Booking_form($command, $bookingaccount_number = null) {
     global $wpdb;
     ?> <script>
     jQuery(function() {
-		jQuery( "#dateofarrival" ).datepicker();
-		jQuery( "#lengthofstay" ).datepicker();
+		jQuery( "#date_of_arrival" ).datepicker();
+		jQuery( "#length_of_stay" ).datepicker();
     });
     </script>
     <?php
