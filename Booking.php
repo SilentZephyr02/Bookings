@@ -121,7 +121,7 @@ function WAD_plugin_menu_includes() {
                 break;
             case 'accounts': include('CRUD/Accounts.php');
                 break;
-            case 'rooms': include('CRUD/Room.php');
+            case 'Rooms': include('CRUD/Room.php');
         }
 }
 
