@@ -366,6 +366,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <input type="text" name="reservation_or_booking" value="'.$booking->reservation_or_booking.'" size="20" class="large-text"/>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>
+     <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
     </form>';
     echo '<p><a href="?page=Bookings">&laquo Back To List</p>';
 
