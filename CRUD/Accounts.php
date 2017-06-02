@@ -28,19 +28,11 @@ function Accounts_CRUD() {
         break;
 
         case 'edit':
-            $msg = Account_form('update', $accountid);
+            $msg = Account_form('update', $accountid,null);
         break;
 
         case 'new':
-            $msg = Account_form('insert',null);
-        break;
-
-        case 'errorEdit':
-            $msg = Account_form('insert',$accountid);
-        break;
-
-        case 'errorNew':
-            $msg = Account_form('insert',null);
+            $msg = Account_form('insert',null,null);
         break;
 
         case 'delete':
@@ -55,13 +47,12 @@ function Accounts_CRUD() {
 
         case 'insert':
             $msg = Account_insert($accountdata);
-            if(is_array($msg)){
-                pr($msg);
-                $command = 'errorNew';
+            if(is_array($msg)){        
+                $msg = Account_form('error',null,$msg);
             }else{
-            $command = '';
+                $command = '';
+                break;
             }
-        break;
     }
 
     if (empty($command)) Account_list();
@@ -107,11 +98,11 @@ function Account_update($account_data) {
         $error[]="last_name";
     }
     */
-    if(!preg_match('/^\d{7,15}$/',$account_data['address'])) {
-        $error[]="address";    
+    if(!preg_match('/^\d{7,15}$/',$account_data['phone_number'])) {
+        $error[]="phone_number";    
     }
-    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['phone_number'])) {
-        $error[]="phone_number";
+    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['address'])) {
+        $error[]="address";
     }
     if(!empty($error)){
         return $error;
@@ -137,17 +128,17 @@ function Account_insert($account_data) {
     if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
         $error[]="last_name";
     }
-    
-    if(!preg_match('/^\d{7,15}$/',$account_data['address'])) {
-        $error[]="address";    
+    */
+    if(!preg_match('/^\d{7,15}$/',$account_data['phone_number'])) {
+        $error[]="phone_number";    
     }
-    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['phone_number'])) {
-        $error[]="phone_number";
+    if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$account_data['address'])) {
+        $error[]="address";
     }
     if(!empty($error)){
         return $error;
     }
-    */
+    
 
     $wpdb->insert( 'ACCOUNTS_TABLE',
     array(
@@ -199,7 +190,7 @@ function Account_list() {
 		  </script>";
 }
 //=======================================================================================
-function Account_form($command, $accountid = null) {
+function Account_form($command, $accountid = null, $errorArray = null) {
     global $wpdb;
     if ($command == 'insert') {
         $account->first_name = '';
@@ -211,6 +202,15 @@ function Account_form($command, $accountid = null) {
     if ($command == 'update') {
         $account = $wpdb->get_row("SELECT * FROM ACCOUNTS_TABLE WHERE id = '$accountid'");
     }
+
+    if ($command == 'error') {
+        $account_data = $_POST;
+        $account->first_name = stripslashes_deep($account_data['first_name']);
+        $account->last_name = stripslashes_deep($account_data['last_name']);
+        $account->address = stripslashes_deep($account_data['address']);
+        $account->phone_number = stripslashes_deep($account_data['phone_number']);
+    }
+
     echo '<form name="Account_form" method="post" action="?page=Accounts">
     <input type="hidden" name="hid" value="'.$accountid.'"/>
     <input type="hidden" name="command" value="'.$command.'"/>
