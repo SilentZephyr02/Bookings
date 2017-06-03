@@ -317,7 +317,8 @@ function Bookings_list() {
 		</thead>
 		<tbody>';
         foreach ($allbookings as $booking) {
-            if(wp_get_current_user()==$booking->account_number){
+            $current_user = wp_get_current_user();
+            if($current_user -> ID == $booking->account_number || current_user_can( 'manage_options' ) {
                 $edit_link = '?page=Bookings&command=edit';
                 $view_link = '?page=Bookings&command=view';
                 $delete_link = '?page=Bookings&command=delete';
