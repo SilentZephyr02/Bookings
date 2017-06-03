@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "0.2";
+$Assignment2_dbversion = "0.3";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -30,6 +30,7 @@ add_shortcode('displayBookingTable', 'display_booking_table');
 add_shortcode('displayRoomsTable', 'display_rooms_table');
 add_action('admin_menu' , 'Assignment2_menu');
 add_action( 'wp_enqueue_scripts', 'load_scripts' );
+
 //=======================================================================================
 function load_scripts() {
      wp_enqueue_style( 'WAD11', plugins_url('css/WAD11.css',__FILE__));
@@ -66,8 +67,7 @@ function Assignment2install () {
             length_of_stay date NOT NULL,
             reservation_or_booking text NOT NULL,
             room_number int NOT NULL,
-            list_of_extras text NOT NULL,
-            PRIMARY KEY (account_number)
+            list_of_extras text NOT NULL
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
             $makeroomstable = 'CREATE TABLE ROOMS_TABLE (
@@ -285,16 +285,20 @@ function Booking_update($bookingdata) {
 //=======================================================================================
 function Booking_insert($bookingdata) {
     global $wpdb;
+    //$current_user = wp_get_current_user();
+    pr($bookingdata);
+    $temp = 0;
+    $wpdb->show_errors();
     $wpdb->insert( 'BOOKINGS_TABLE',
     array(
-        'account_number' => $bookingdata['account_number'],
-        'date_made' => date("d-m-y"),
-        'date_of_arrival' => date("d-m-y"),
-        'length_of_stay' => date("d-m-Y"),
+        'account_number' => $temp,
+        'date_made' => $bookingdata['date_made'],
+        'date_of_arrival' => $bookingdata['date_of_arrival'],
+        'length_of_stay' => $bookingdata['length_of_stay'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'room_number' => $bookingdata['room_number'],
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
-        $msg = "Booking for ".$bookingdata['date_of_arrival']."has been made.";
+        $msg = "Booking for ".$temp." has been made.";
         return $msg;
 }
 
@@ -317,15 +321,15 @@ function Bookings_list() {
 		</thead>
 		<tbody>';
         foreach ($allbookings as $booking) {
-            $current_user = wp_get_current_user();
-            if ($current_user->ID == $booking->account_number || current_user_can( 'manage_options' )){
+         //   $current_user = wp_get_current_user();
+          //  if ($current_user->ID == $booking->account_number || current_user_can( 'manage_options' )){
                 $edit_link = '?page=Bookings&command=edit';
                 $view_link = '?page=Bookings&command=view';
                 $delete_link = '?page=Bookings&command=delete';
 
                 echo '<tr>';
                 echo '<td>' . $booking->account_number . '</td>';
-                echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $room->date_of_arrival . '</a></strong>';
+                echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $booking->date_of_arrival . '</a></strong>';
                 echo '<div class="row-actions">';
                 echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
                 echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
@@ -337,7 +341,7 @@ function Bookings_list() {
                 echo "<script type='text/javascript'>
                             function doDelete() { if (!confirm('Are you sure?')) return false; }
                         </script>";   
-            }
+            
         }
         echo '</tbody></table>';
 }
@@ -365,6 +369,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     if ($command == 'update') {
         $booking = $wpdb->get_row("SELECT * FROM BOOKINGS_TABLE WHERE account_number = '.$bookingaccount_number");
     }
+
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
     <input type="date" name="date_made" value="'.$booking->date_made.'"/>
@@ -374,6 +379,8 @@ function Booking_form($command, $bookingaccount_number = null) {
     <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text" id="length_of_stay"/>
     <p>Reservation Or Booking<br/>
     <input type="text" name="reservation_or_booking" value="'.$booking->reservation_or_booking.'" size="20" class="large-text"/>
+    <p>Room Number<br/>
+    <input type="text" name="room_number" value="'.$booking->room_number.'" size="20" class="large-text" id="length_of_stay"/>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>
      <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
