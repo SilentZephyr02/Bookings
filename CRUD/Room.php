@@ -122,21 +122,21 @@ function Room_list() {
 		<tbody>';
         foreach ($allrooms as $rooms) {
             $edit_link = '?page=Rooms&command=edit';
-            $view_link = '?page=Rooms&command=edit';
+            $view_link = '?page=Rooms&command=view';
             $delete_link = '?page=Rooms&command=delete';
 
             echo '<tr>';
-            echo '<td>' . $room->room_number . '</td>';
+            echo '<td>' . $rooms->room_number . '</td>';
 
-            echo '<td><strong><a href="'.$edit_link.'" title="Edit This Room">' . $room->room_type . '</a></strong>';
+            echo '<td><strong><a href="'.$edit_link.'" title="Edit This Room">' . $rooms->room_type . '</a></strong>';
+            echo '<div class="row-actions">';
             echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
             echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
             echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick="return doDelete();">Trash</a></span>';
             echo'</div>';
             echo '</td>';
-
-            echo '<td>' . $room->berth . '</td>';
-            echo '<td>$' . $booking->price . '</td>';
+            echo '<td>' . $rooms->berth . '</td>';
+            echo '<td>$' . $rooms->price . '</td>';
         }
         echo '</tbody></table>';
 

@@ -55,6 +55,7 @@ function Assignment2install () {
             last_name text NOT NULL,
             address text NOT NULL,
             phone_number int NOT NULL,
+            wp_id text NOT NULL,
             PRIMARY KEY (id)
             )ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
@@ -108,7 +109,7 @@ function Assignment2settingslink($links) {
 function Assignment2_menu() {
     add_menu_page( 'Assignment2Settings', 'Bookings' , 'read' , 'Bookings','Bookings_CRUD' );
 
-    add_submenu_page( 'Bookings', 'Manage Account'   , 'Manage Account'  , 'read'            , 'Accounts', 'WAD_plugin_menu_includes'   );
+    add_submenu_page( 'Bookings', 'Manage Account'   , 'Manage Account'  , 'manage_options'  , 'Accounts', 'WAD_plugin_menu_includes'   );
     add_submenu_page( 'Bookings', 'Manage Rooms'     , 'Manage Rooms'    , 'manage_options'  , 'Rooms'   , 'WAD_plugin_menu_includes'   );
 }
 
@@ -168,6 +169,7 @@ function display_rooms_table() {
 }
 */
 
+//=======================================================================================
 function Bookings_CRUD(){
     echo '<h3>Bookings Page</h3>';
     echo '<h3>Contents of the POST data</h3>';
@@ -233,6 +235,7 @@ function Bookings_CRUD(){
 
 
 
+//=======================================================================================
 function Bookings_view($bookingaccount_number) {
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM BOOKINGS_TABLE");
@@ -252,6 +255,7 @@ function Bookings_view($bookingaccount_number) {
 
 
 
+//=======================================================================================
 function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {
     global $wpdb;
     
@@ -264,6 +268,7 @@ function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {
 
 
 
+//=======================================================================================
 function Booking_update($bookingdata) {
     global $wpdb, $current_user;
     $wpdb->update('BOOKINGS_TABLE',
@@ -277,7 +282,7 @@ function Booking_update($bookingdata) {
 
 
 
-
+//=======================================================================================
 function Booking_insert($bookingdata) {
     global $wpdb;
     $wpdb->insert( 'BOOKINGS_TABLE',
@@ -296,6 +301,7 @@ function Booking_insert($bookingdata) {
 
 
 
+//=======================================================================================
 function Bookings_list() {
     global $wpdb;
     $query = "SELECT account_number, date_of_arrival, length_of_stay, room_number FROM BOOKINGS_TABLE ORDER BY account_number DESC";
@@ -311,30 +317,33 @@ function Bookings_list() {
 		</thead>
 		<tbody>';
         foreach ($allbookings as $booking) {
-            $edit_link = '?page=Bookings&command=edit';
-            $view_link = '?page=Bookings&command=view';
-            $delete_link = '?page=Bookings&command=delete';
+            if(wp_get_current_user()==$booking->account_number){
+                $edit_link = '?page=Bookings&command=edit';
+                $view_link = '?page=Bookings&command=view';
+                $delete_link = '?page=Bookings&command=delete';
 
-            echo '<tr>';
-            echo '<td>' . $booking->account_number . '</td>';
-            echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $room->date_of_arrival . '</a></strong>';
-            echo '<div class="row-actions">';
-            echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
-            echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
-            echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
-            echo'</div>';
-            echo '</td>';
-            echo '<td>' . $booking->length_of_stay . '</td>';
-            echo '<td>' . $booking->room_number . '</td>';
-            echo "<script type='text/javascript'>
-                        function doDelete() { if (!confirm('Are you sure?')) return false; }
-                    </script>";   
+                echo '<tr>';
+                echo '<td>' . $booking->account_number . '</td>';
+                echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $room->date_of_arrival . '</a></strong>';
+                echo '<div class="row-actions">';
+                echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
+                echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
+                echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
+                echo'</div>';
+                echo '</td>';
+                echo '<td>' . $booking->length_of_stay . '</td>';
+                echo '<td>' . $booking->room_number . '</td>';
+                echo "<script type='text/javascript'>
+                            function doDelete() { if (!confirm('Are you sure?')) return false; }
+                        </script>";   
+            }
         }
         echo '</tbody></table>';
 }
 
 
 
+//=======================================================================================
 function Booking_form($command, $bookingaccount_number = null) {
     global $wpdb;
     ?> <script>
@@ -362,7 +371,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Length Of Stay<br/>
     <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text" id="length_of_stay"/>
-    <p>Reservation Of Booking<br/>
+    <p>Reservation Or Booking<br/>
     <input type="text" name="reservation_or_booking" value="'.$booking->reservation_or_booking.'" size="20" class="large-text"/>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>

@@ -7,11 +7,7 @@ function Accounts_CRUD() {
     pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Accounts';
-        if(!isset($_GET['command'])){
-            echo'<a href="?page=Accounts&command=new" class="add-new-h2">Add New</a>';
-        }
-        echo'</h2>
+        <h2>Accounts <a href="?page=Accounts&command=new" class="add-new-h2">Add New</a></h2>
         <div style="clear: both"></div>';
 
     $accountdata = $_POST;
