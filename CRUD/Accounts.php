@@ -209,25 +209,43 @@ function Account_form($command, $accountid = null, $errorArray = null) {
         $account->last_name = stripslashes_deep($account_data['last_name']);
         $account->address = stripslashes_deep($account_data['address']);
         $account->phone_number = stripslashes_deep($account_data['phone_number']);
+        $command = 'insert';
     }
 
     echo '<form name="Account_form" method="post" action="?page=Accounts">
     <input type="hidden" name="hid" value="'.$accountid.'"/>
     <input type="hidden" name="command" value="'.$command.'"/>
 
-    <p>First Name:<br/>
+    <p>First Name<br/>
     <input type="text" name="first_name" value="'.$account->first_name.'" size="20" class="large-text" />
-    <p>Last Name:<br/>
+    <p>Last Name<br/>
     <input type="text" name="last_name" value="'.$account->last_name.'" size="20" class="large-text" />
-    </p>
-    <p>Address:<br/>
+    <p>Address';
+        if(is_array($errorArray)){
+        foreach($errorArray as $error){
+            if($error == 'address'){
+                echo '<font color="FF0000"> Address is invalid</font>';
+            }
+        }
+    }
+    echo
+    '<br/>
     <textarea name="address" rows="10" cols="30" class="large-text">'.$account->address.'</textarea>
-    <p>Phone Number:<br/>
+    <p>Phone Number';
+        if(is_array($errorArray)){
+        foreach($errorArray as $error){
+            if($error == 'phone_number'){
+                echo '<font color="FF0000"> Phone number is invalid</font>';
+            }
+        }
+    }
+    echo
+    '<br/>
     <input type="text" name="phone_number" value="'.$account->phone_number.'" size="60" class="large-text" />
     <hr/>
     <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
     </form>';
-    echo '<p> <a href="?page=Accounts">&laquo; Back To Accounts List</p>';
+    echo'<p><a href="?page=Accounts">&laquo; Back To Accounts List</p>';
 }
 //=======================================================================================
 
