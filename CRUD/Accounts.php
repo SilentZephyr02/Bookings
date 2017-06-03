@@ -7,7 +7,11 @@ function Accounts_CRUD() {
     pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
-        <h2>Accounts <a href="?page=Accounts&command=new" class="add-new-h2">Add New</a></h2>
+        <h2>Accounts';
+        if(!isset($_GET['command'])){
+            echo'<a href="?page=Accounts&command=new" class="add-new-h2">Add New</a>';
+        }
+        echo'</h2>
         <div style="clear: both"></div>';
 
     $accountdata = $_POST;
@@ -42,13 +46,18 @@ function Accounts_CRUD() {
 
         case 'update':
             $msg = Account_update($accountdata);
-            $command = '';
+            if(is_array($msg)){        
+                $msg = Account_form('errorUpdate',$_REQUEST['hid'],$msg);
+            }else{
+                $command = '';
+                break;
+            }
         break;
 
         case 'insert':
             $msg = Account_insert($accountdata);
             if(is_array($msg)){        
-                $msg = Account_form('error',null,$msg);
+                $msg = Account_form('errorNew',null,$msg);
             }else{
                 $command = '';
                 break;
@@ -90,14 +99,13 @@ function Account_delete($accountid) {
 function Account_update($account_data) {
     global $wpdb, $current_user;
     $error;
-    /*
-    if(!(filter_var($account_data['first_name'], FILTER_VALIDATE_STRING)){
+    
+    if(!preg_match('/^[A-z]+$/',$account_data['first_name'])){
         $error[]="first_name";
     }
-    if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
+    if(!preg_match('/^[A-z]+$/',$account_data['last_name'])){
         $error[]="last_name";
     }
-    */
     if(!preg_match('/^\d{7,15}$/',$account_data['phone_number'])) {
         $error[]="phone_number";    
     }
@@ -114,21 +122,20 @@ function Account_update($account_data) {
             'address' => stripslashes_deep($account_data['address']),
             'phone_number' => stripslashes_deep($account_data['phone_number'])),
         array( 'id' => $account_data['hid']));
-    $msg = "Account ".$accountdata['hid']. "has been updated";
+        $msg = "Account ".$account_data['hid']. " has been updated";
     return $msg;
 }
 //=======================================================================================
 function Account_insert($account_data) {
     global $wpdb, $current_user;
     $error;
-    /*
-    if(!(filter_var($account_data['first_name'], FILTER_VALIDATE_STRING)){
+    
+    if(!preg_match('/^[A-z]+$/',$account_data['first_name'])){
         $error[]="first_name";
     }
-    if(!(filter_var($account_data['last_name'], FILTER_VALIDATE_STRING)){
+    if(!preg_match('/^[A-z]+$/',$account_data['last_name'])){
         $error[]="last_name";
     }
-    */
     if(!preg_match('/^\d{7,15}$/',$account_data['phone_number'])) {
         $error[]="phone_number";    
     }
@@ -203,25 +210,54 @@ function Account_form($command, $accountid = null, $errorArray = null) {
         $account = $wpdb->get_row("SELECT * FROM ACCOUNTS_TABLE WHERE id = '$accountid'");
     }
 
-    if ($command == 'error') {
+    if ($command == 'errorNew'||$command == 'errorUpdate') {
         $account_data = $_POST;
         $account->first_name = stripslashes_deep($account_data['first_name']);
         $account->last_name = stripslashes_deep($account_data['last_name']);
         $account->address = stripslashes_deep($account_data['address']);
         $account->phone_number = stripslashes_deep($account_data['phone_number']);
-        $command = 'insert';
+        if ($command == 'errorUpdate'){
+            $command = 'update';
+            
+        }
+        else $command = 'insert';
     }
 
     echo '<form name="Account_form" method="post" action="?page=Accounts">
     <input type="hidden" name="hid" value="'.$accountid.'"/>
-    <input type="hidden" name="command" value="'.$command.'"/>
+    <input type="hidden" name="command" value="'.$command.'"/>';
 
-    <p>First Name<br/>
+    if(is_array($errorArray)){
+        echo '<font color="FF0000"> There were errors in your details</font>';
+    }
+
+    echo'<p>First Name';
+    if(is_array($errorArray)){
+        foreach($errorArray as $error){
+            if($error == 'first_name'){
+                echo '<font color="FF0000"> First Name is invalid</font>';
+            }
+        }
+    }
+
+    echo 
+    '<br/>
     <input type="text" name="first_name" value="'.$account->first_name.'" size="20" class="large-text" />
-    <p>Last Name<br/>
+
+    <p>Last Name';
+    if(is_array($errorArray)){
+        foreach($errorArray as $error){
+            if($error == 'last_name'){
+                echo '<font color="FF0000"> Last Name is invalid</font>';
+            }
+        }
+    }
+    echo 
+    '<br/>
     <input type="text" name="last_name" value="'.$account->last_name.'" size="20" class="large-text" />
+
     <p>Address';
-        if(is_array($errorArray)){
+    if(is_array($errorArray)){
         foreach($errorArray as $error){
             if($error == 'address'){
                 echo '<font color="FF0000"> Address is invalid</font>';
@@ -230,9 +266,10 @@ function Account_form($command, $accountid = null, $errorArray = null) {
     }
     echo
     '<br/>
-    <textarea name="address" rows="10" cols="30" class="large-text">'.$account->address.'</textarea>
+    <input type="text" name="address" value="'.$account->address.'" size="60" class="large-text" />
+
     <p>Phone Number';
-        if(is_array($errorArray)){
+    if(is_array($errorArray)){
         foreach($errorArray as $error){
             if($error == 'phone_number'){
                 echo '<font color="FF0000"> Phone number is invalid</font>';
@@ -242,6 +279,7 @@ function Account_form($command, $accountid = null, $errorArray = null) {
     echo
     '<br/>
     <input type="text" name="phone_number" value="'.$account->phone_number.'" size="60" class="large-text" />
+
     <hr/>
     <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
     </form>';
