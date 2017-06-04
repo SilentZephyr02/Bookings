@@ -38,7 +38,88 @@ function load_scripts() {
      wp_enqueue_script( 'json2' );
 }
 
+//=======================================================================================
+//1. Add a new form element...
+add_action( 'register_form', 'myplugin_register_form' );
+function myplugin_register_form() {
 
+
+    $first_name = ( ! empty( $_POST['first_name'] ) ) ? trim( $_POST['first_name'] ) : '';
+    $last_name = ( ! empty( $_POST['last_name'] ) ) ? trim( $_POST['last_name'] ) : '';
+    $address = ( ! empty( $_POST['address'] ) ) ? trim( $_POST['address'] ) : '';
+    $phone_number = ( ! empty( $_POST['phone_number'] ) ) ? trim( $_POST['phone_number'] ) : '';
+        
+        ?>
+        <p>
+            <label for="password"><?php _e( 'Password', 'mydomain' ) ?><br />
+                <input type="password" name="password" id="password" class="input" value="" size="25" /></label>
+            <label for="password2"><?php _e( 'Password again', 'mydomain' ) ?><br />
+                <input type="password" name="password2" id="password2" class="input" value="" size="25" /></label>
+
+            <label for="first_name"><?php _e( 'First Name', 'mydomain' ) ?><br />
+                <input type="text" name="first_name" id="first_name" class="input" value="<?php echo esc_attr( wp_unslash( $first_name ) ); ?>" size="25" /></label>
+            <label for="last_name"><?php _e( 'Last Name', 'mydomain' ) ?><br />
+                <input type="text" name="last_name" id="last_name" class="input" value="<?php echo esc_attr( wp_unslash( $last_name ) ); ?>" size="25" /></label>
+            <label for="address"><?php _e( 'Address', 'mydomain' ) ?><br />
+                <input type="text" name="address" id="address" class="input" value="<?php echo esc_attr( wp_unslash( $address ) ); ?>" size="25" /></label>
+            <label for="phone_number"><?php _e( 'Phone Number', 'mydomain' ) ?><br />
+                <input type="text" name="phone_number" id="phone_number" class="input" value="<?php echo esc_attr( wp_unslash( $phone_number ) ); ?>" size="25" /></label>
+        </p>
+        <?php
+    }
+
+    //2. Add validation. In this case, we make sure first_name is required.
+    add_filter( 'registration_errors', 'myplugin_registration_errors', 10, 3 );
+    function myplugin_registration_errors( $errors, $sanitized_user_login, $user_email ) {
+
+
+        if ( empty( $_POST['password'] ) || ! empty( $_POST['password'] ) && trim( $_POST['password'] ) == '' ) {
+            $errors->add( 'password_error', __( '<strong>ERROR</strong>: You must include a password.', 'mydomain' ) );
+        }
+        else if (!$_POST['password']==$_POST['password2']){
+            $errors->add( 'password_error', __( '<strong>ERROR</strong>: Passwords do not match.', 'mydomain' ) );
+        }
+        
+        if ( empty( $_POST['first_name'] ) || ! empty( $_POST['first_name'] ) && trim( $_POST['first_name'] ) == '' ) {
+            $errors->add( 'first_name_error', __( '<strong>ERROR</strong>: You must include a first name.', 'mydomain' ) );
+        }
+
+        if ( empty( $_POST['last_name'] ) || ! empty( $_POST['last_name'] ) && trim( $_POST['last_name'] ) == '' ) {
+            $errors->add( 'last_name_error', __( '<strong>ERROR</strong>: You must include a last name.', 'mydomain' ) );
+        }
+
+        if ( empty( $_POST['address'] ) || ! empty( $_POST['address'] ) && trim( $_POST['address'] ) == '' ) {
+            $errors->add( 'address_error', __( '<strong>ERROR</strong>: You must include an Address.', 'mydomain' ) );
+        }
+        else if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$_POST['address'])) {
+            $errors->add( 'address_error', __( '<strong>ERROR</strong>: Address is invaild.', 'mydomain' ) );
+        }
+        
+        if ( empty( $_POST['phone_number'] ) || ! empty( $_POST['phone_number'] ) && trim( $_POST['phone_number'] ) == '' ) {
+            $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: You must include a Phone number.', 'mydomain' ) );
+        }
+        else if(!preg_match('/^\d{7,15}$/',$_POST['phone_number'])) {
+            $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: The phone number is not valid.', 'mydomain' ) );    
+        }
+
+
+
+        return $errors;
+    }
+
+    //3. Finally, save our extra registration user meta.
+    add_action( 'user_register', 'myplugin_user_register' );
+    function myplugin_user_register( $user_id ) {
+        if ( ! empty( $_POST['first_name'] ) ) {
+            update_user_meta( $user_id, 'first_name', trim( $_POST['first_name'] ) );
+        }
+        if ( ! empty( $_POST['last_name'] ) ) {
+            update_user_meta( $user_id, 'last_name', trim( $_POST['last_name'] ) );
+        }
+        if ( ! empty( $_POST['password'] ) ) {
+            update_user_meta( $user_id, 'password', trim( $_POST['password'] ) );
+        }
+    }
 
 //=======================================================
 function Assignment2install () {

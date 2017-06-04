@@ -141,7 +141,6 @@ function Account_insert($account_data) {
     if(!empty($error)){
         return $error;
     }
-    
 
     $wpdb->insert( 'ACCOUNTS_TABLE',
     array(
