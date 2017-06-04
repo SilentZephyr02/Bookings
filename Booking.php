@@ -368,21 +368,26 @@ function Booking_update($bookingdata) {
 
 //=======================================================================================
 function Booking_insert($bookingdata) {
-    global $wpdb;
-    //$current_user = wp_get_current_user();
-    pr($bookingdata);
-    $temp = 0;
-    $wpdb->show_errors();
+    global $wpdb, $current_user;
+
+    $query = "SELECT id, wp_id  FROM ACCOUNTS_TABLE";
+    $usersID = $wpdb->get_results($query);
+    foreach ($usersID as $wpID){
+        if($wpID->wp_id==$current_user->ID){
+            $current_userID = $wpID->id;
+        }
+    }
+
     $wpdb->insert( 'BOOKINGS_TABLE',
     array(
-        'account_number' => $temp,
+        'account_number' => $current_userID,
         'date_made' => $bookingdata['date_made'],
         'date_of_arrival' => $bookingdata['date_of_arrival'],
         'length_of_stay' => $bookingdata['length_of_stay'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'room_number' => $bookingdata['room_number'],
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
-        $msg = "Booking for ".$temp." has been made.";
+        $msg = "Booking for ".$current_userID." has been made.";
         return $msg;
 }
 
@@ -391,7 +396,7 @@ function Booking_insert($bookingdata) {
 
 //=======================================================================================
 function Bookings_list() {
-    global $wpdb;
+    global $wpdb, $current_user;
     $query = "SELECT account_number, date_of_arrival, length_of_stay, room_number FROM BOOKINGS_TABLE ORDER BY account_number DESC";
     $allbookings = $wpdb->get_results($query);
     echo '<table class="wp-list-table widefat">
@@ -404,30 +409,38 @@ function Bookings_list() {
 		</tr>
 		</thead>
 		<tbody>';
-        foreach ($allbookings as $booking) {
-         //   $current_user = wp_get_current_user();
-          //  if ($current_user->ID == $booking->account_number || current_user_can( 'manage_options' )){
-                $edit_link = '?page=Bookings&command=edit';
-                $view_link = '?page=Bookings&command=view';
-                $delete_link = '?page=Bookings&command=delete';
 
-                echo '<tr>';
-                echo '<td>' . $booking->account_number . '</td>';
-                echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $booking->date_of_arrival . '</a></strong>';
-                echo '<div class="row-actions">';
-                echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
-                echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
-                echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
-                echo'</div>';
-                echo '</td>';
-                echo '<td>' . $booking->length_of_stay . '</td>';
-                echo '<td>' . $booking->room_number . '</td>';
-                echo "<script type='text/javascript'>
-                            function doDelete() { if (!confirm('Are you sure?')) return false; }
-                        </script>";   
-            
+    $query = "SELECT id, wp_id  FROM ACCOUNTS_TABLE";
+    $usersID = $wpdb->get_results($query);
+    foreach ($usersID as $wpID){
+        if($wpID->wp_id==$current_user->ID){
+            $current_userID = $wpID->id;
         }
+    }
+    foreach ($allbookings as $booking) {
+        if (current_user_can( 'manage_options' ) || $current_userID == $booking->account_number){
+        $edit_link = '?page=Bookings&command=edit';
+        $view_link = '?page=Bookings&command=view';
+        $delete_link = '?page=Bookings&command=delete';
+
+        echo '<tr>';
+        echo '<td>' . $booking->account_number . '</td>';
+        echo '<td><strong><a href="'.$edit_link.'" title="Edit This Booking">' . $booking->date_of_arrival . '</a></strong>';
+        echo '<div class="row-actions">';
+        echo '<span class="edit"><a href="'.$edit_link.'" title="Edit this item">Edit</a></span> | ';
+        echo '<span class="view"><a href="'.$view_link.'" title="View this Item">View</a></span> | ';
+        echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
+        echo'</div>';
+        echo '</td>';
+        echo '<td>' . $booking->length_of_stay . '</td>';
+        echo '<td>' . $booking->room_number . '</td>';
+        echo "<script type='text/javascript'>
+                    function doDelete() { if (!confirm('Are you sure?')) return false; }
+                </script>";   
+        }
+    }
         echo '</tbody></table>';
+    
 }
 
 
