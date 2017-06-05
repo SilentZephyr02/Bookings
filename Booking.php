@@ -452,6 +452,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     jQuery(function() {
 		jQuery( "#date_of_arrival" ).datepicker();
 		jQuery( "#length_of_stay" ).datepicker();
+        jQuery( "#date_made" ).datepicker();
     });
     </script>
     <?php
@@ -469,7 +470,7 @@ function Booking_form($command, $bookingaccount_number = null) {
 
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
-    <input type="date" name="date_made" value="'.$booking->date_made.'"/>
+     <input type="text" name="date_made" value="'.$booking->date_made.'" size="20" class="large-text" id="date_made"/>
     <p>Date of Arrival<br />
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Length Of Stay<br/>
