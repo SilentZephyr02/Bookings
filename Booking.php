@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "0.4";
+$Assignment2_dbversion = "0.5";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -149,9 +149,9 @@ function Assignment2install () {
             account_number int(11) NOT NULL,
             date_made date NOT NULL,
             date_of_arrival date NOT NULL,
-            length_of_stay date NOT NULL,
+            date_of_departure date NOT NULL,
             reservation_or_booking text NOT NULL,
-            room_number int NOT NULL,
+            room_number text NOT NULL,
             list_of_extras text NOT NULL
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
@@ -357,7 +357,7 @@ function Booking_update($bookingdata) {
     global $wpdb, $current_user;
     $wpdb->update('BOOKINGS_TABLE',
         array( 'date_of_arrival' => date("d-m-Y"),
-        'length_of_stay' => date("d-m-Y"),
+        'date_of_departure' => date("d-m-Y"),
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
         $msg = "Booking on ".$bookingdata['date_of_arrival']. "has been updated.";
@@ -389,7 +389,7 @@ function Booking_insert($bookingdata) {
         'account_number' => $current_userID,
         'date_made' => $bookingdata['date_made'],
         'date_of_arrival' => $bookingdata['date_of_arrival'],
-        'length_of_stay' => $bookingdata['length_of_stay'],
+        'date_of_departure' => $bookingdata['date_of_departure'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'room_number' => $bookingdata['room_number'],
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
@@ -403,14 +403,14 @@ function Booking_insert($bookingdata) {
 //=======================================================================================
 function Bookings_list() {
     global $wpdb, $current_user;
-    $query = "SELECT account_number, date_of_arrival, length_of_stay, room_number FROM BOOKINGS_TABLE ORDER BY account_number DESC";
+    $query = "SELECT account_number, date_of_arrival, date_of_departure, room_number FROM BOOKINGS_TABLE ORDER BY account_number DESC";
     $allbookings = $wpdb->get_results($query);
     echo '<table class="wp-list-table widefat">
 		<thead>
 		<tr>
 			<th scope="col" class="manage-column">Account Number</th>
 			<th scope="col" class="manage-column">Date Of Arrival</th>
-			<th scope="col" class="manage-column">Length Of Stay</th>
+			<th scope="col" class="manage-column">Date of Departure</th>
 			<th scope="col" class="manage-column">Room Number</th>
 		</tr>
 		</thead>
@@ -438,7 +438,7 @@ function Bookings_list() {
         echo '<span class="trash"><a href="'.$delete_link.'" title="Delete This Item" onclick=return doDelete();">Trash</a></span>';
         echo'</div>';
         echo '</td>';
-        echo '<td>' . $booking->length_of_stay . '</td>';
+        echo '<td>' . $booking->date_of_departure . '</td>';
         echo '<td>' . $booking->room_number . '</td>';
         echo "<script type='text/javascript'>
                     function doDelete() { if (!confirm('Are you sure?')) return false; }
@@ -457,7 +457,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     ?> <script>
     jQuery(function() {
 		jQuery( "#date_of_arrival" ).datepicker({ dateFormat: 'yy-m-d' });
-		jQuery( "#length_of_stay" ).datepicker({ dateFormat: 'yy-m-d' });
+		jQuery( "#date_of_departure" ).datepicker({ dateFormat: 'yy-m-d' });
         jQuery( "#date_made" ).datepicker({ dateFormat: 'yy-m-d' });
     });
     </script>
@@ -465,7 +465,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     if ($command == 'insert') {
         $booking->date_made = '';
         $booking->date_of_arrival = '';
-        $booking->length_of_stay = '';
+        $booking->date_of_departure = '';
         $booking->reservation_or_booking = '';
         $booking->room_number = '';
         $booking->list_of_extras = '';
@@ -481,8 +481,8 @@ function Booking_form($command, $bookingaccount_number = null) {
      <input type="text" name="date_made" value="'.$booking->date_made.'" size="20" class="large-text" id="date_made"/>
     <p>Date of Arrival<br />
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
-    <p>Length Of Stay<br/>
-    <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text" id="length_of_stay"/>
+    <p>Date of Departure<br/>
+    <input type="text" name="date_of_departure" value="'.$booking->date_of_departure.'" size="20" class="large-text" id="date_of_departure"/>
     <p>Reservation Or Booking<br/>
     <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Number<br/>
