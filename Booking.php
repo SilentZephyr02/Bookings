@@ -373,10 +373,16 @@ function Booking_insert($bookingdata) {
     $query = "SELECT id, wp_id  FROM ACCOUNTS_TABLE";
     $usersID = $wpdb->get_results($query);
     foreach ($usersID as $wpID){
+        pr($current_user);
+                pr($wpID);
         if($wpID->wp_id==$current_user->ID){
             $current_userID = $wpID->id;
+               pr($current_userID);
+                
         }
     }
+ 
+
 
     $wpdb->insert( 'BOOKINGS_TABLE',
     array(
@@ -450,9 +456,9 @@ function Booking_form($command, $bookingaccount_number = null) {
     global $wpdb;
     ?> <script>
     jQuery(function() {
-		jQuery( "#date_of_arrival" ).datepicker();
-		jQuery( "#length_of_stay" ).datepicker();
-        jQuery( "#date_made" ).datepicker();
+		jQuery( "#date_of_arrival" ).datepicker({ dateFormat: 'yy-m-d' });
+		jQuery( "#length_of_stay" ).datepicker({ dateFormat: 'yy-m-d' });
+        jQuery( "#date_made" ).datepicker({ dateFormat: 'yy-m-d' });
     });
     </script>
     <?php
@@ -476,7 +482,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <p>Length Of Stay<br/>
     <input type="text" name="length_of_stay" value="'.$booking->length_of_stay.'" size="20" class="large-text" id="length_of_stay"/>
     <p>Reservation Or Booking<br/>
-    <input type="text" name="reservation_or_booking" value="'.$booking->reservation_or_booking.'" size="20" class="large-text"/>
+    <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Number<br/>
     <input type="text" name="room_number" value="'.$booking->room_number.'" size="20" class="large-text" id="length_of_stay"/>
     <p>List Of Extras<br/>
