@@ -151,7 +151,7 @@ function Assignment2install () {
             date_of_arrival date NOT NULL,
             date_of_departure date NOT NULL,
             reservation_or_booking text NOT NULL,
-            room_number text NOT NULL,
+            room_type text NOT NULL,
             list_of_extras text NOT NULL
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
@@ -232,7 +232,7 @@ function display_booking_table() {
     $allbookings = $wpdb->get_results($query);
     $buffer = '<ol>';
     foreach ($allbookings as $booking) {
-        $buffer .= '<li>'.$booking->account_number.'<br />'.$booking->room_number.'</li>';
+        $buffer .= '<li>'.$booking->account_number.'<br />'.$booking->room_type.'</li>';
     }
     $buffer .= '</ol>';
     return $buffer;
@@ -325,9 +325,9 @@ function Bookings_view($bookingaccount_number) {
     $qry = $wpdb->prepare("SELECT * FROM BOOKINGS_TABLE");
     $row = $wpdb->get_row($qry);
     echo '<p>';
-    echo 'Room Number:';
+    echo 'Room Type:';
     echo '<br />';
-    echo $row->room_number;
+    echo $row->room_type;
     echo '<p>';
     echo 'Date Of Arrival';
     echo '<br />';
@@ -391,7 +391,7 @@ function Booking_insert($bookingdata) {
         'date_of_arrival' => $bookingdata['date_of_arrival'],
         'date_of_departure' => $bookingdata['date_of_departure'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
-        'room_number' => $bookingdata['room_number'],
+        'room_type' => $bookingdata['room_type'],
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
         $msg = "Booking for ".$current_userID." has been made.";
         return $msg;
@@ -403,7 +403,7 @@ function Booking_insert($bookingdata) {
 //=======================================================================================
 function Bookings_list() {
     global $wpdb, $current_user;
-    $query = "SELECT account_number, date_of_arrival, date_of_departure, room_number FROM BOOKINGS_TABLE ORDER BY account_number DESC";
+    $query = "SELECT account_number, date_of_arrival, date_of_departure, room_type FROM BOOKINGS_TABLE ORDER BY account_number DESC";
     $allbookings = $wpdb->get_results($query);
     echo '<table class="wp-list-table widefat">
 		<thead>
@@ -411,7 +411,7 @@ function Bookings_list() {
 			<th scope="col" class="manage-column">Account Number</th>
 			<th scope="col" class="manage-column">Date Of Arrival</th>
 			<th scope="col" class="manage-column">Date of Departure</th>
-			<th scope="col" class="manage-column">Room Number</th>
+			<th scope="col" class="manage-column">Room Type</th>
 		</tr>
 		</thead>
 		<tbody>';
@@ -439,7 +439,7 @@ function Bookings_list() {
         echo'</div>';
         echo '</td>';
         echo '<td>' . $booking->date_of_departure . '</td>';
-        echo '<td>' . $booking->room_number . '</td>';
+        echo '<td>' . $booking->room_type . '</td>';
         echo "<script type='text/javascript'>
                     function doDelete() { if (!confirm('Are you sure?')) return false; }
                 </script>";   
@@ -467,7 +467,7 @@ function Booking_form($command, $bookingaccount_number = null) {
         $booking->date_of_arrival = '';
         $booking->date_of_departure = '';
         $booking->reservation_or_booking = '';
-        $booking->room_number = '';
+        $booking->room_type = '';
         $booking->list_of_extras = '';
     }
     if ($command == 'update') {
@@ -485,7 +485,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <input type="text" name="date_of_departure" value="'.$booking->date_of_departure.'" size="20" class="large-text" id="date_of_departure"/>
     <p>Reservation Or Booking<br/>
     <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
-    <p>Room Number<br/>
+    <p>Room Type<br/>
     
      <select name="Room Type">';
      foreach ($allrooms as $room) {
