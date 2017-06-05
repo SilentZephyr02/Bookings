@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "0.5";
+$Assignment2_dbversion = "0.6";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -391,7 +391,7 @@ function Booking_insert($bookingdata) {
         'date_of_arrival' => $bookingdata['date_of_arrival'],
         'date_of_departure' => $bookingdata['date_of_departure'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
-        'room_type' => $bookingdata['room_type'],
+        'room_type' => stripslashes_deep($bookingdata['room_type']),
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
         $msg = "Booking for ".$current_userID." has been made.";
         return $msg;
@@ -487,9 +487,9 @@ function Booking_form($command, $bookingaccount_number = null) {
     <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Type<br/>
     
-     <select name="Room Type">';
+     <select name="Room_type">';
      foreach ($allrooms as $room) {
-         echo '<option value="'.$room->room_type.'">'.$room->room_type.'</option>';
+         echo '<option value="'.$room->room_type.'" name="'.$room->room_type.'">'.$room->room_type.'</option>';
      }
     echo '</select>
     <p>List Of Extras<br/>
