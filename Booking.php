@@ -473,6 +473,8 @@ function Booking_form($command, $bookingaccount_number = null) {
     if ($command == 'update') {
         $booking = $wpdb->get_row("SELECT * FROM BOOKINGS_TABLE WHERE account_number = '.$bookingaccount_number");
     }
+    $roomqry = "SELECT room_type FROM ROOMS_TABLE";
+    $allrooms = $wpdb->get_results($roomqry);
 
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
@@ -484,7 +486,12 @@ function Booking_form($command, $bookingaccount_number = null) {
     <p>Reservation Or Booking<br/>
     <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Number<br/>
-    <input type="text" name="room_number" value="'.$booking->room_number.'" size="20" class="large-text" id="length_of_stay"/>
+    
+     <select name="Room Type">';
+     foreach ($allrooms as $room) {
+         echo '<option value="'.$room->room_type.'">'.$room->room_type.'</option>';
+     }
+    echo '</select>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>
      <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
