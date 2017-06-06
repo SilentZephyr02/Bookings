@@ -146,6 +146,7 @@ function Assignment2install () {
             )ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
             $makebookingstable = 'CREATE TABLE BOOKINGS_TABLE (
+            id int(11) NOT NULL auto_increment,
             account_number int(11) NOT NULL,
             date_made date NOT NULL,
             date_of_arrival date NOT NULL,
@@ -382,7 +383,7 @@ function Booking_insert($bookingdata) {
         }
     }
  
-
+pr($bookingdata);
 
     $wpdb->insert( 'BOOKINGS_TABLE',
     array(
@@ -393,6 +394,8 @@ function Booking_insert($bookingdata) {
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
         'room_type' => stripslashes_deep($bookingdata['room_type']),
         'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
+
+        $wpdb->show_errors();
         $msg = "Booking for ".$current_userID." has been made.";
         return $msg;
 }
@@ -400,7 +403,7 @@ function Booking_insert($bookingdata) {
 
 
 
-//=======================================================================================
+//======================================================================================
 function Bookings_list() {
     global $wpdb, $current_user;
     $query = "SELECT account_number, date_of_arrival, date_of_departure, room_type FROM BOOKINGS_TABLE ORDER BY account_number DESC";
@@ -425,7 +428,7 @@ function Bookings_list() {
     }
     foreach ($allbookings as $booking) {
         if (current_user_can( 'manage_options' ) || $current_userID == $booking->account_number){
-        $edit_link = '?page=Bookings&command=edit';
+        $edit_link = '?page=Bookings&id='. $booking->id.'&command=edit';
         $view_link = '?page=Bookings&command=view';
         $delete_link = '?page=Bookings&command=delete';
 
@@ -478,16 +481,19 @@ function Booking_form($command, $bookingaccount_number = null) {
 
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
-     <input type="text" name="date_made" value="'.$booking->date_made.'" size="20" class="large-text" id="date_made"/>
     <p>Date of Arrival<br />
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Date of Departure<br/>
     <input type="text" name="date_of_departure" value="'.$booking->date_of_departure.'" size="20" class="large-text" id="date_of_departure"/>
     <p>Reservation Or Booking<br/>
-    <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
+    <p>Reservation</p>
+    <input type="radio" name="reservation_or_booking" value="reservation" /> 
+    <p>Booking</p>
+
+    <input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Type<br/>
     
-     <select name="Room_type" value="'.$booking->room_type.'">';
+     <select name="room_type" value="'.$booking->room_type.'">';
      foreach ($allrooms as $room) {
          echo '<option value="'.$room->room_type.'" name="'.$room->room_type.'">'.$room->room_type.'</option>';
      }
