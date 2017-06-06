@@ -487,7 +487,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <p>Reservation</p><input type="radio" name="reservation_or_booking" value="reservation" /> <p>Booking</p><input type="radio" name="reservation_or_booking" value="booking" />
     <p>Room Type<br/>
     
-     <select name="Room_type">';
+     <select name="Room_type" value="'.$booking->room_type.'">';
      foreach ($allrooms as $room) {
          echo '<option value="'.$room->room_type.'" name="'.$room->room_type.'">'.$room->room_type.'</option>';
      }
