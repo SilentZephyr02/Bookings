@@ -80,7 +80,11 @@ function Accounts_view($accountid) {// for when the administrator want to view a
     echo 'Last Name:';
     echo '<br />';
     echo $row->last_name;
-    echo '<p><a href="?page=Accounts">&laquo; Back to List</p>';
+    echo '</p><p>Address:<br/>';
+    echo $row->address;
+    echo '</p><p>Phone Number:<br/>';
+    echo $row->phone_number;
+    echo '</p><p><a href="?page=Accounts">&laquo; Back to List</p>';
 }
 //=======================================================================================
 function Account_delete($accountid) { // function for when the administrator wants to delete a specific account
