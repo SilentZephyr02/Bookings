@@ -1,6 +1,6 @@
 <?php
 //=======================================================================================
-function Rooms_CRUD() {
+function Rooms_CRUD() {// the CRUD function for the rooms including a switch statement for the different commands
     echo '<h3>Contents of the POST data</h3>';
     pr($_POST);
     echo '<h3>Contents of the REQUEST data</h3>';
@@ -57,7 +57,7 @@ function Rooms_CRUD() {
         echo '</div>';
 }
 //=======================================================================================
-function Rooms_view($room_number) {
+function Rooms_view($room_number) {//for when a user wants to view a speccific room
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM ROOMS_TABLE");
     $row = $wpdb->get_row($qry);
@@ -72,7 +72,7 @@ function Rooms_view($room_number) {
     echo '<p><a href="?page=Rooms">&laquo; Back to the List</p>';
 }
 //=======================================================================================
-function Room_delete($room_number) {
+function Room_delete($room_number) {//for when the administrator wants to delete a room
     global $wpdb;
 
     $results = $wpdb->query($wpdb->prepare("DELETE FROM ROOMS_TABLE WHERE room_number = $room_number"));
@@ -82,7 +82,7 @@ function Room_delete($room_number) {
     return $msg;
 }
 //=======================================================================================
-function Room_insert($roomdata) {
+function Room_insert($roomdata) {//used for when a NEW room is being added
     global $wpdb;
     $wpdb->insert( 'ROOMS_TABLE',
     array(
@@ -95,7 +95,7 @@ function Room_insert($roomdata) {
         return $msg;
 }
 //=======================================================================================
-function Room_update($roomdata) {
+function Room_update($roomdata) {//used for when an EXISTING room is being changed/updated
     global $wpdb, $current_user;
     $wpdb->update('ROOMS_TABLE',
     array( 'room_type' => stripslashes_deep($roomdata['room_type']),
@@ -106,7 +106,7 @@ function Room_update($roomdata) {
     return $msg;
 }
 //=======================================================================================
-function Room_list() {
+function Room_list() {//function for showing all the rooms
     global $wpdb;
     $query = "SELECT room_number, room_type, berth, price FROM ROOMS_TABLE ORDER BY room_number DESC";
     $allrooms = $wpdb->get_results($query);
@@ -145,7 +145,7 @@ function Room_list() {
 		  </script>";
 }
 //=======================================================================================
-function Room_form($command, $room_number = null) {
+function Room_form($command, $room_number = null) {//the function that creates the form for adding a new room
     global $wpdb;
     if ($command == 'insert') {
       $room->room_number = '';
