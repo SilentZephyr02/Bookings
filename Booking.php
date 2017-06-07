@@ -174,7 +174,7 @@ function Assignment2install () {
     }
 }
 //=======================================================================================
-function Assignment2_update_dbcheck() {
+function Assignment2_update_dbcheck() { 
     global $Assignment2_dbversion;
     if (get_site_option('Assignment2_dbversion') != $Assignment2_dbversion) Assignment2install();
 }
@@ -254,7 +254,7 @@ function display_rooms_table() {
 */
 
 //=======================================================================================
-function Bookings_CRUD(){
+function Bookings_CRUD(){ // the CRUD function for the bookings including a switch statement for the different commands
     echo '<h3>Bookings Page</h3>';
     echo '<h3>Contents of the POST data</h3>';
     pr($_POST);
@@ -320,7 +320,7 @@ function Bookings_CRUD(){
 
 
 //=======================================================================================
-function Bookings_view($bookingaccount_number) {
+function Bookings_view($bookingaccount_number) {//this function is used when the user want to view a specific booking
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM BOOKINGS_TABLE");
     $row = $wpdb->get_row($qry);
@@ -342,7 +342,7 @@ function Bookings_view($bookingaccount_number) {
 
 
 //=======================================================================================
-function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {
+function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {//function for deleting a booking in the database
     global $wpdb;
     
     $results = $wpdb->query($wpdb->prepare("DELETE FROM BOOKINGS_TABLE WHERE account_number = $bookingaccount_number AND date_of_arrival = $bookingdate_of_arrival"));
@@ -355,7 +355,7 @@ function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {
 
 
 //=======================================================================================
-function Booking_update($bookingdata) {
+function Booking_update($bookingdata) {// function for updating a current booking in the database
     global $wpdb, $current_user;
     $wpdb->update('BOOKINGS_TABLE',
         array( 'date_of_arrival' => date("d-m-Y"),
@@ -369,7 +369,7 @@ function Booking_update($bookingdata) {
 
 
 //=======================================================================================
-function Booking_insert($bookingdata) {
+function Booking_insert($bookingdata) { //function for adding a new booking into the database
     global $wpdb, $current_user;
 
     $query = "SELECT id, wp_id  FROM ACCOUNTS_TABLE";
@@ -405,7 +405,7 @@ pr($bookingdata);
 
 
 //======================================================================================
-function Bookings_list() {
+function Bookings_list() { //The function for displaying all the users bookings
     global $wpdb, $current_user;
     $query = "SELECT account_number, date_of_arrival, date_of_departure, room_type FROM BOOKINGS_TABLE ORDER BY account_number DESC";
     $allbookings = $wpdb->get_results($query);
@@ -456,7 +456,7 @@ function Bookings_list() {
 
 
 //=======================================================================================
-function Booking_form($command, $bookingaccount_number = null) {
+function Booking_form($command, $bookingaccount_number = null) {//The function/form for entering bookings into the database
     global $wpdb;
     ?> <script>
     jQuery(function() {
@@ -479,7 +479,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     }
     $roomqry = "SELECT room_type FROM ROOMS_TABLE";
     $allrooms = $wpdb->get_results($roomqry);
-
+// date_made and command is hidden so that a user cant intentionally or accidentally change them
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
     <input type="hidden" name="date_made" value="'.$booking->date_made.'"/>
@@ -496,7 +496,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     <p>Room Type<br/>
     
      <select name="room_type" value="'.$booking->room_type.'">';
-     foreach ($allrooms as $room) {
+     foreach ($allrooms as $room) {//to show the different types of rooms available for booking
          echo '<option value="'.$room->room_type.'" name="'.$room->room_type.'">'.$room->room_type.'</option>';
      }
     echo '</select>
@@ -506,5 +506,13 @@ function Booking_form($command, $bookingaccount_number = null) {
     </form>';
     echo '<p><a href="?page=Bookings">&laquo Back To List</p>';
 
+}
+
+function contact_form(){ //Function to let public users contact the business
+    echo'<h2>Contact Us</h2><br>
+    <p>
+This is an email link:
+<a href="mailto:admin@mail.com?Subject=Hello%20I%20would%20like%20to%20inquire%20about" target="_top">Email Us Here</a>
+</p>';
 }
 ?>
