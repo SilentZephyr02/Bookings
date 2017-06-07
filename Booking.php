@@ -131,6 +131,8 @@ function Assignment2install () {
     global $wpdb;
     global $Assignment2_dbversion;
 
+    update_option( "users_can_register", 1 );
+    
     $currentversion = get_option( "Assignment2_dbversion");
     if ($Assignment2_dbversion > $currentversion) {
         if ($wpdb->get_var("show tables like 'ACCOUNTS_TABLE'") != 'ACCOUNTS TABLE') {
@@ -365,11 +367,14 @@ function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {//func
 //=======================================================================================
 function Booking_update($bookingdata) {// function for updating a current booking in the database
     global $wpdb, $current_user;
+
     $wpdb->update('BOOKINGS_TABLE',
-        array( 'date_of_arrival' => date("d-m-Y"),
-        'date_of_departure' => date("d-m-Y"),
-        'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
-        'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
+        array( 
+            'date_of_arrival' => $bookingdata['date_of_arrival'],
+            'date_of_departure' => $bookingdata['date_of_departure'],
+            'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
+            'room_type' => stripslashes_deep($bookingdata['room_type']),
+            'list_of_extras' => stripslashes_deep($bookingdata['list_of_extras'])));
         $msg = "Booking on ".$bookingdata['date_of_arrival']. "has been updated.";
         return $msg;
 }
@@ -392,12 +397,13 @@ function Booking_insert($bookingdata) { //function for adding a new booking into
         }
     }
  
-pr($bookingdata);
+    pr($bookingdata);
+    $date = date('Y-m-d');
 
     $wpdb->insert( 'BOOKINGS_TABLE',
     array(
         'account_number' => $current_userID,
-        'date_made' => $bookingdata['date_made'],
+        'date_made' => $date,
         'date_of_arrival' => $bookingdata['date_of_arrival'],
         'date_of_departure' => $bookingdata['date_of_departure'],
         'reservation_or_booking' => stripslashes_deep($bookingdata['reservation_or_booking']),
@@ -440,6 +446,7 @@ function Bookings_list() { //The function for displaying all the users bookings
         $edit_link = '?page=Bookings&id='. $booking->id.'&command=edit';
         $view_link = '?page=Bookings&command=view';
         $delete_link = '?page=Bookings&command=delete';
+
 
         echo '<tr>';
         echo '<td>' . $booking->account_number . '</td>';
@@ -487,10 +494,8 @@ function Booking_form($command, $bookingaccount_number = null) {//The function/f
     }
     $roomqry = "SELECT room_type FROM ROOMS_TABLE";
     $allrooms = $wpdb->get_results($roomqry);
-// date_made and command is hidden so that a user cant intentionally or accidentally change them
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
-    <input type="hidden" name="date_made" value="'.$booking->date_made.'"/>
     <p>Date of Arrival<br />
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Date of Departure<br/>
