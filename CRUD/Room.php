@@ -12,8 +12,8 @@ function Rooms_CRUD() {// the CRUD function for the rooms including a switch sta
     
     $roomdata = $_POST;
 
-    if (isset($_REQUEST['room_number']))
-        $room_number = $_REQUEST['room_number'];
+    if (isset($_REQUEST["room_number"]))
+        $room_number = $_REQUEST["room_number"];
     else
         $room_number = '';
 
