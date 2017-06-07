@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "1.06";
+$Assignment2_dbversion = "1.20";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -137,11 +137,11 @@ function Assignment2install () {
             $makeaccounttable = 'CREATE TABLE ACCOUNTS_TABLE (
             id int(11) NOT NULL auto_increment,
             account_created_date date NOT NULL,
-            first_name text NOT NULL,
-            last_name text NOT NULL,
-            address text NOT NULL,
+            first_name CHAR(30) NOT NULL,
+            last_name CHAR(30) NOT NULL,
+            address CHAR(100) NOT NULL,
             phone_number int NOT NULL,
-            wp_id text NOT NULL,
+            wp_id CHAR(50) NOT NULL,
             PRIMARY KEY (id)
             )ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
@@ -150,15 +150,15 @@ function Assignment2install () {
             date_made date NOT NULL ,
             date_of_arrival date NOT NULL,
             date_of_departure date NOT NULL,
-            reservation_or_booking text NOT NULL,
-            room_type text NOT NULL,
-            list_of_extras text NOT NULL
+            reservation_or_booking CHAR(30) NOT NULL,
+            room_type CHAR(20) NOT NULL,
+            list_of_extras CHAR(120) NOT NULL
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
             $makeroomstable = 'CREATE TABLE ROOMS_TABLE (
             room_number int NOT NULL,
-            room_type text NOT NULL,
-            features text NOT NULL,
+            room_type CHAR(30) NOT NULL,
+            features CHAR(200) NOT NULL,
             berth int NOT NULL,
             price int NOT NULL,
             PRIMARY KEY (room_number)
