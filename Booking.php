@@ -122,8 +122,15 @@ function myplugin_register_form() {
                 'address' => stripslashes_deep($_POST['address']),
                 'phone_number' => $_POST['phone_number'],
                 'wp_id' => $user_id));
+                }
 
+    function auto_login_new_user( $user_id ) {
+        wp_set_current_user($user_id);
+        wp_set_auth_cookie($user_id);
+        wp_redirect( home_url( 'wp-admin/admin.php?page=Bookings' ));
+        exit;
     }
+    add_action( 'user_register', 'auto_login_new_user' );
 
 //=======================================================
 function Assignment2install () {
