@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "1.20";
+$Assignment2_dbversion = "1.28";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -324,7 +324,9 @@ function Bookings_view($bookingaccount_number) {//this function is used when the
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM BOOKINGS_TABLE");
     $row = $wpdb->get_row($qry);
-    echo '<p>';
+    echo '<p>Date Made:';
+    echo $row->date_made;
+    echo '</p><p>';
     echo 'Room Type:';
     echo '<br />';
     echo $row->room_type;
@@ -334,6 +336,11 @@ function Bookings_view($bookingaccount_number) {//this function is used when the
     echo $row->date_of_arrival;
     echo '</p><p>Date of Departure:<br/>';
     echo $row->date_of_departure;
+    echo '</p><p>Reservation or Booking:';
+    echo $row->reservation_or_booking;
+    echo '</p><p>List Of Extras:<br/>';
+    echo $row->list_of_extras;
+
     echo '</p><p><a href="?page=Bookings">&laquo; Back to List</p>';
 }
 
