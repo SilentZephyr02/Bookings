@@ -39,7 +39,6 @@ function load_scripts() {
 }
 
 //=======================================================================================
-//1. Add a new form element...
 add_action( 'register_form', 'myplugin_register_form' );
 function myplugin_register_form() {
 
@@ -63,74 +62,69 @@ function myplugin_register_form() {
         <?php
     }
 
-    //2. Add validation. In this case, we make sure first_name is required.
-    add_filter( 'registration_errors', 'myplugin_registration_errors', 10, 3 );
-    function myplugin_registration_errors( $errors, $sanitized_user_login, $user_email ) {
-        
-        if ( empty( $_POST['first_name'] ) || ! empty( $_POST['first_name'] ) && trim( $_POST['first_name'] ) == '' ) {
-            $errors->add( 'first_name_error', __( '<strong>ERROR</strong>: You must include a first name.', 'mydomain' ) );
-        }
-        else if(!preg_match('/^[A-z]+$/',$_POST['first_name'])){
-            $errors->add( 'first_name_error', __( '<strong>ERROR</strong>: First Name is invaild.', 'mydomain' ) );
-        }
-
-
-        if ( empty( $_POST['last_name'] ) || ! empty( $_POST['last_name'] ) && trim( $_POST['last_name'] ) == '' ) {
-            $errors->add( 'last_name_error', __( '<strong>ERROR</strong>: You must include a last name.', 'mydomain' ) );
-        }
-        else if(!preg_match('/^[A-z]+$/',$_POST['last_name'])){
-            $errors->add( 'last_name_error', __( '<strong>ERROR</strong>: Last Name is invaild.', 'mydomain' ) );
-        }
-
-
-        if ( empty( $_POST['address'] ) || ! empty( $_POST['address'] ) && trim( $_POST['address'] ) == '' ) {
-            $errors->add( 'address_error', __( '<strong>ERROR</strong>: You must include an Address.', 'mydomain' ) );
-        }
-        else if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$_POST['address'])) {
-            $errors->add( 'address_error', __( '<strong>ERROR</strong>: Address is invaild.', 'mydomain' ) );
-        }
-        
-        if ( empty( $_POST['phone_number'] ) || ! empty( $_POST['phone_number'] ) && trim( $_POST['phone_number'] ) == '' ) {
-            $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: You must include a Phone number.', 'mydomain' ) );
-        }
-        else if(!preg_match('/^\d{7,15}$/',$_POST['phone_number'])) {
-            $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: The phone number is not valid.', 'mydomain' ) );    
-        }
-
-
-
-        return $errors;
+add_filter( 'registration_errors', 'myplugin_registration_errors', 10, 3 );
+function myplugin_registration_errors( $errors, $sanitized_user_login, $user_email ) { 
+    if ( empty( $_POST['first_name'] ) || ! empty( $_POST['first_name'] ) && trim( $_POST['first_name'] ) == '' ) {
+        $errors->add( 'first_name_error', __( '<strong>ERROR</strong>: You must include a first name.', 'mydomain' ) );
+    }
+    else if(!preg_match('/^[A-z]+$/',$_POST['first_name'])){
+        $errors->add( 'first_name_error', __( '<strong>ERROR</strong>: First Name is invaild.', 'mydomain' ) );
     }
 
-    //3. Finally, save our extra registration user meta.
-    add_action( 'user_register', 'myplugin_user_register' );
-    function myplugin_user_register( $user_id ) {
-         global $wpdb;
-        if ( ! empty( $_POST['first_name'] ) ) {
-            update_user_meta( $user_id, 'first_name', trim( $_POST['first_name'] ) );
-        }
-        if ( ! empty( $_POST['last_name'] ) ) {
-            update_user_meta( $user_id, 'last_name', trim( $_POST['last_name'] ) );
-        }
 
-        $date = date('Y-m-d');
-        $wpdb->insert( 'ACCOUNTS_TABLE',
-            array(
-                'account_created_date' => $date,
-                'first_name' => stripslashes_deep($_POST['first_name']),
-                'last_name' => stripslashes_deep($_POST['last_name']),
-                'address' => stripslashes_deep($_POST['address']),
-                'phone_number' => $_POST['phone_number'],
-                'wp_id' => $user_id));
-                }
-
-    function auto_login_new_user( $user_id ) {
-        wp_set_current_user($user_id);
-        wp_set_auth_cookie($user_id);
-        wp_redirect( home_url( 'wp-admin/admin.php?page=Bookings' ));
-        exit;
+    if ( empty( $_POST['last_name'] ) || ! empty( $_POST['last_name'] ) && trim( $_POST['last_name'] ) == '' ) {
+        $errors->add( 'last_name_error', __( '<strong>ERROR</strong>: You must include a last name.', 'mydomain' ) );
     }
-    add_action( 'user_register', 'auto_login_new_user' );
+    else if(!preg_match('/^[A-z]+$/',$_POST['last_name'])){
+        $errors->add( 'last_name_error', __( '<strong>ERROR</strong>: Last Name is invaild.', 'mydomain' ) );
+    }
+
+    if ( empty( $_POST['address'] ) || ! empty( $_POST['address'] ) && trim( $_POST['address'] ) == '' ) {
+        $errors->add( 'address_error', __( '<strong>ERROR</strong>: You must include an Address.', 'mydomain' ) );
+    }
+    else if(!preg_match('/^\d{1,5}[A-z]?\s[A-z]+\s[A-z]+$/',$_POST['address'])) {
+        $errors->add( 'address_error', __( '<strong>ERROR</strong>: Address is invaild.', 'mydomain' ) );
+    }
+    
+    if ( empty( $_POST['phone_number'] ) || ! empty( $_POST['phone_number'] ) && trim( $_POST['phone_number'] ) == '' ) {
+        $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: You must include a Phone number.', 'mydomain' ) );
+    }
+    else if(!preg_match('/^\d{7,15}$/',$_POST['phone_number'])) {
+        $errors->add( 'phone_number_error', __( '<strong>ERROR</strong>: The phone number is not valid.', 'mydomain' ) );    
+    }
+
+    return $errors;
+}
+
+
+add_action( 'user_register', 'myplugin_user_register' );
+function myplugin_user_register( $user_id ) {
+    global $wpdb;
+    if ( ! empty( $_POST['first_name'] ) ) {
+        update_user_meta( $user_id, 'first_name', trim( $_POST['first_name'] ) );
+    }
+    if ( ! empty( $_POST['last_name'] ) ) {
+        update_user_meta( $user_id, 'last_name', trim( $_POST['last_name'] ) );
+    }
+
+    $date = date('Y-m-d');
+    $wpdb->insert( 'ACCOUNTS_TABLE',
+        array(
+            'account_created_date' => $date,
+            'first_name' => stripslashes_deep($_POST['first_name']),
+            'last_name' => stripslashes_deep($_POST['last_name']),
+            'address' => stripslashes_deep($_POST['address']),
+            'phone_number' => $_POST['phone_number'],
+            'wp_id' => $user_id));
+            }
+
+function auto_login_new_user( $user_id ) {
+    wp_set_current_user($user_id);
+    wp_set_auth_cookie($user_id);
+    wp_redirect( home_url( 'wp-admin/admin.php?page=Bookings' ));
+    exit;
+}
+add_action( 'user_register', 'auto_login_new_user' );
 
 //=======================================================
 function Assignment2install () {
