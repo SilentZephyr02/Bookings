@@ -126,8 +126,8 @@ function Room_list() {//function for showing all the rooms
 		</thead>
 		<tbody>';
         foreach ($allrooms as $rooms) {
-            $edit_link = '?page=Rooms&&room_number='.$rooms->room_number.'command=edit';
-            $view_link = '?page=Rooms&&room_number='.$rooms->room_number.'command=view';
+            $edit_link = '?page=Rooms&room_number='.$rooms->room_number.'&command=edit';
+            $view_link = '?page=Rooms&room_number='.$rooms->room_number.'&command=view';
             $delete_link = '?page=Rooms&room_number='.$rooms->room_number.'&command=delete';
 
             echo '<tr>';
