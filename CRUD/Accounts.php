@@ -1,6 +1,6 @@
 <?php
 //=======================================================================================
-function Accounts_CRUD() {
+function Accounts_CRUD() {// the CRUD function for the accounts including a switch statement for the different commands
     echo '<h3>Contents of the POST data</h3>';
     pr($_POST);
     echo '<h3>Contents of the REQUEST data</h3>';
@@ -68,7 +68,7 @@ function Accounts_CRUD() {
 	echo '</div>';
 }
 //=======================================================================================
-function Accounts_view($accountid) {
+function Accounts_view($accountid) {// for when the administrator want to view a specific account
     global $wpdb;
     $qry = $wpdb->prepare("SELECT * FROM ACCOUNTS_TABLE");
     $row = $wpdb->get_row($qry);
@@ -83,7 +83,7 @@ function Accounts_view($accountid) {
     echo '<p><a href="?page=Accounts">&laquo; Back to List</p>';
 }
 //=======================================================================================
-function Account_delete($accountid) {
+function Account_delete($accountid) { // function for when the administrator wants to delete a specific account
     global $wpdb;
     $results = $wpdb->query($wpdb->prepare("DELETE FROM ACCOUNTS_TABLE WHERE id=%s",$accountid));
     if ($results) {
@@ -152,7 +152,7 @@ function Account_insert($account_data) {
         return $msg;
 }
 //=======================================================================================
-function Account_list() {
+function Account_list() {//function for showing an administrator all the accounts
     global $wpdb, $current_user;
     $query = "SELECT id, first_name, last_name, phone_number FROM ACCOUNTS_TABLE ORDER BY last_name DESC";
     $allaccounts = $wpdb->get_results($query);
@@ -192,7 +192,7 @@ function Account_list() {
 		  </script>";
 }
 //=======================================================================================
-function Account_form($command, $accountid = null, $errorArray = null) {
+function Account_form($command, $accountid = null, $errorArray = null) {// the form used for updating or adding an account
     global $wpdb;
     if ($command == 'insert') {
         $account->first_name = '';
