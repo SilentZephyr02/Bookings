@@ -81,7 +81,7 @@ function Rooms_view($room_number) {//for when a user wants to view a speccific r
 function Room_delete($room_number) {//for when the administrator wants to delete a room
     global $wpdb;
 
-    $results = $wpdb->query($wpdb->prepare("DELETE FROM ROOMS_TABLE WHERE room_number = $room_number"));
+    $results = $wpdb->query($wpdb->prepare("DELETE FROM ROOMS_TABLE WHERE room_number=%s",$room_number));
     if ($results){
         $msg = "Room Number $room_number successfully deleted";
     }
