@@ -59,7 +59,7 @@ function Rooms_CRUD() {// the CRUD function for the rooms including a switch sta
 //=======================================================================================
 function Rooms_view($room_number) {//for when a user wants to view a speccific room
     global $wpdb;
-    $qry = $wpdb->prepare("SELECT * FROM ROOMS_TABLE");
+    $qry = $wpdb->prepare("SELECT * FROM ROOMS_TABLE WHERE room_number=%d",$room_number);
     $row = $wpdb->get_row($qry);
     echo '<p>';
     echo 'Room Number:';
@@ -80,8 +80,7 @@ function Rooms_view($room_number) {//for when a user wants to view a speccific r
 //=======================================================================================
 function Room_delete($room_number) {//for when the administrator wants to delete a room
     global $wpdb;
-
-    $results = $wpdb->query($wpdb->prepare("DELETE FROM ROOMS_TABLE WHERE room_number=%s",$room_number));
+    $results = $wpdb->query($wpdb->prepare("DELETE FROM ROOMS_TABLE WHERE room_number=%d",$room_number));
     if ($results){
         $msg = "Room Number $room_number successfully deleted";
     }
