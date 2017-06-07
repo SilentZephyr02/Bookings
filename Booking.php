@@ -12,7 +12,7 @@ Last update: 9th May 2017
 
 //=======================================================================================
 
-$Assignment2_dbversion = "0.6";
+$Assignment2_dbversion = "0.9.2";
 
 if (!function_exists('pr')) {
     function pr($var) {echo '<pre>'; var_dump($var); echo '</pre>';}
@@ -146,9 +146,8 @@ function Assignment2install () {
             )ENGINE=MyISAM DEFAULT CHARSET=utf8;';
 
             $makebookingstable = 'CREATE TABLE BOOKINGS_TABLE (
-            id int(11) NOT NULL auto_increment,
             account_number int(11) NOT NULL,
-            date_made date NOT NULL,
+            date_made date NOT NULL ,
             date_of_arrival date NOT NULL,
             date_of_departure date NOT NULL,
             reservation_or_booking text NOT NULL,
@@ -329,11 +328,13 @@ function Bookings_view($bookingaccount_number) {
     echo 'Room Type:';
     echo '<br />';
     echo $row->room_type;
-    echo '<p>';
-    echo 'Date Of Arrival';
+    echo '</p>';
+    echo '<p>Date Of Arrival';
     echo '<br />';
     echo $row->date_of_arrival;
-    echo '<p><a href="?page=Bookings">&laquo; Back to List</p>';
+    echo '</p><p>Date of Departure:<br/>';
+    echo $row->date_of_departure;
+    echo '</p><p><a href="?page=Bookings">&laquo; Back to List</p>';
 }
 
 
@@ -344,7 +345,7 @@ function Bookings_view($bookingaccount_number) {
 function Booking_delete($bookingaccount_number, $bookingdate_of_arrival) {
     global $wpdb;
     
-    $results = $wpdb->query($wpdb->prepare("DELETE FROM BOOKINGS_TABLE WHERE account_number=$bookingaccount_number AND date_of_arrival = $bookingdate_of_arrival"));
+    $results = $wpdb->query($wpdb->prepare("DELETE FROM BOOKINGS_TABLE WHERE account_number = $bookingaccount_number AND date_of_arrival = $bookingdate_of_arrival"));
     if ($results) {
         $msg = "Booking on $bookingdate_of_arrival by Account $bookingaccount_number was successfully deleted.";
     }
@@ -466,7 +467,7 @@ function Booking_form($command, $bookingaccount_number = null) {
     </script>
     <?php
     if ($command == 'insert') {
-        $booking->date_made = '';
+        $booking->date_made = date("Y/m/d");
         $booking->date_of_arrival = '';
         $booking->date_of_departure = '';
         $booking->reservation_or_booking = '';
@@ -474,13 +475,14 @@ function Booking_form($command, $bookingaccount_number = null) {
         $booking->list_of_extras = '';
     }
     if ($command == 'update') {
-        $booking = $wpdb->get_row("SELECT * FROM BOOKINGS_TABLE WHERE account_number = '.$bookingaccount_number");
+        $booking = $wpdb->get_row("SELECT * FROM BOOKINGS_TABLE WHERE account_number = '$bookingaccount_number'");
     }
     $roomqry = "SELECT room_type FROM ROOMS_TABLE";
     $allrooms = $wpdb->get_results($roomqry);
 
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
+    <input type="hidden" name="date_made" value="'.$booking->date_made.'"/>
     <p>Date of Arrival<br />
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
     <p>Date of Departure<br/>
