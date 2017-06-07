@@ -65,11 +65,17 @@ function Rooms_view($room_number) {//for when a user wants to view a speccific r
     echo 'Room Number:';
     echo '<br />';
     echo $row->room_number;
-    echo '<p>';
+    echo '</p><p>';
     echo 'Room Type:';
     echo '<br />';
     echo $row->room_type;
-    echo '<p><a href="?page=Rooms">&laquo; Back to the List</p>';
+    echo '</p><p>Features:<br/>';
+    echo $row->features;
+    echo '</p><p>Berth:<br/>';
+    echo $row->berth;
+    echo '</p><p>Price:<br/>';
+    echo $row->price;
+    echo '</p><p><a href="?page=Rooms">&laquo; Back to the List</p>';
 }
 //=======================================================================================
 function Room_delete($room_number) {//for when the administrator wants to delete a room
