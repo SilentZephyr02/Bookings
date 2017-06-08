@@ -210,16 +210,38 @@ function WAD_plugin_menu_includes() {
         switch ($current_page) {
             case 'Assignment2': aboutPage();  //default
                 break;
-            case 'Bookings': include('CRUD/Bookings.php');
+            case 'Bookings': 
+                include('CRUD/Bookings.php');
+                Bookings_CRUD();
                 break;
-            case 'Accounts': include('CRUD/Accounts.php');
+            case 'Accounts': 
+                include('CRUD/Accounts.php');
+                Accounts_CRUD();
                 break;
-            case 'Rooms': include('CRUD/Room.php');
+            case 'Rooms': 
+                include('CRUD/Room.php');
+                Rooms_CRUD();
+                break;
         }
 }
 
  function aboutPage(){
-    contact_form();
+    if(!current_user_can("manage_options")){
+        contact_form();
+    }
+    else{
+        echo'<h2>Bookings Overview</h2></br>';
+        include('CRUD/Bookings.php');
+        Bookings_list();
+
+        echo'<h2>Accounts Overview</h2></br>';
+        include('CRUD/Accounts.php');
+        Account_list();
+
+        echo'<h2>Rooms Overview</h2></br>';
+        include('CRUD/Room.php');
+        Room_list();
+    }
  }
 
  function contact_form(){ //Function to let public users contact the business

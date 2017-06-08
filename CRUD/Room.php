@@ -181,6 +181,4 @@ function Room_form($command, $room_number = null) {//the function that creates t
 }
 //========================================================================================
 
-Rooms_CRUD();
-
 ?>

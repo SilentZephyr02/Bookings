@@ -158,7 +158,7 @@ function Account_insert($account_data) {
 //=======================================================================================
 function Account_list() {//function for showing an administrator all the accounts
     global $wpdb, $current_user;
-    $query = "SELECT id, first_name, last_name, phone_number FROM ACCOUNTS_TABLE ORDER BY last_name DESC";
+    $query = "SELECT id, first_name, last_name, phone_number FROM ACCOUNTS_TABLE ORDER BY id ASC";
     $allaccounts = $wpdb->get_results($query);
     echo '<table class="wp-list-table widefat">
 		<thead>
@@ -285,7 +285,4 @@ function Account_form($command, $accountid = null, $errorArray = null) {// the f
     echo'<p><a href="?page=Accounts">&laquo; Back To Accounts List</p>';
 }
 //=======================================================================================
-
-Accounts_CRUD();
-
 ?>

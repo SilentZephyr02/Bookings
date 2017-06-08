@@ -235,9 +235,9 @@ function Booking_form($command, $bookingaccount_number = null) {//The function/f
     $allrooms = $wpdb->get_results($roomqry);
     echo '<form name="Booking_form" method="post" action="?page=Bookings">
     <input type="hidden" name="command" value="'.$command.'"/>
-    <p>Date of Arrival<br />
+    <p>Date of Arrival (YYYY-MM-DD)<br/>
     <input type="text" name="date_of_arrival" value="'.$booking->date_of_arrival.'" size="20" class="large-text" id="date_of_arrival"/>
-    <p>Date of Departure<br/>
+    <p>Date of Departure (YYYY-MM-DD)<br/>
     <input type="text" name="date_of_departure" value="'.$booking->date_of_departure.'" size="20" class="large-text" id="date_of_departure"/>
     <p>Reservation Or Booking<br/>
     <p>Reservation</p>
@@ -254,12 +254,10 @@ function Booking_form($command, $bookingaccount_number = null) {//The function/f
     echo '</select>
     <p>List Of Extras<br/>
     <textarea name="list_of_extras" rows="10" cols="30" class="large-text">'.$booking->list_of_extras.'</textarea></p>
-     <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
+    <p class="submit"><input type="submit" name="submit" value="Save Changes" class="button-primary" /></p>
     </form>';
     echo '<p><a href="?page=Bookings">&laquo Back To List</p>';
 
 }
-
-Bookings_CRUD();
 
 ?>
