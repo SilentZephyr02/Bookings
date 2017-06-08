@@ -218,49 +218,42 @@ function WAD_plugin_menu_includes() {
         }
 }
 
-/*
-function display_accounts_table() {
-    global $wpdb;
-
-    $query = "SELECT * FROM ACCOUNTS_TABLE ORDER BY id DESC";
-    $allaccounts = $wpdb->get_results($query);
-    $buffer = '<ol>';
-    foreach ($allaccounts as $account) {
-        $buffer .= '<li>'.$account->first_name.'<br />'.$account->last_name.'</li>';   
-    }
-    $buffer .='</ol>';
-    return $buffer;
-}
-
-function display_booking_table() {
-    global $wpdb;
-
-    $query = " SELECT * FROM BOOKINGS_TABLE ORDER BY account_number DESC";
-    $allbookings = $wpdb->get_results($query);
-    $buffer = '<ol>';
-    foreach ($allbookings as $booking) {
-        $buffer .= '<li>'.$booking->account_number.'<br />'.$booking->room_type.'</li>';
-    }
-    $buffer .= '</ol>';
-    return $buffer;
-}
-
-
-function display_rooms_table() {
-    global $Assignment2_db;
-
-    $query = "SELECT * FROM ROOMS_TABLE ORDER BY room_number DESC";
-    $allrooms = $Assignment2_db->get_results($query);
-    $buffer = '<ol>';
-    foreach ($allrooms as $room) {
-        $buffer .= '<li>'.$room->room_number.'<br />'.$room->room_type.'</li>';
-    }
-    $buffer .= '</ol>';
-    return $buffer;
-}
-*/
  function aboutPage(){
-
+    contact_form();
  }
+
+ function contact_form(){ //Function to let public users contact the business
+    echo'<h2>Contact Us</h2></br>';
+
+    echo '<form name="Contact" method="post">
+    <p>Subject<br />
+    <input type="text" name="subject" size="4" value ="'.$_POST[subject].'" class="large-text" id="subject"/>
+    <p>Message<br/>
+    <textarea name="message" rows="10" cols="30" class="large-text">'.$_POST[message].'</textarea></p>
+    <p class="submit"><input type="submit" name="submit" value="Send Email" class="button-primary" /></p>
+    </form>'
+    ;
+
+    $errorArray;
+
+    if($_POST[submit]== "Send Email"){
+        if($_POST[subject]==""){
+            $errorArray[]='Subject cannot be empty';
+        }
+        if($_POST[message]==""){
+            $errorArray[]='Message cannot be empty';
+        }
+
+        if(!is_array($errorArray)){
+            wp_mail('example@email.com',$_POST[subject],$_POST[message]);
+            echo "The Email was sent";
+        }
+        else{
+            foreach($errorArray as $errors){
+                echo '<font color="FF0000">'. $errors.'</font></br>';
+            }
+        }
+    }
+}
 
 ?>

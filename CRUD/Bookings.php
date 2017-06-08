@@ -260,14 +260,6 @@ function Booking_form($command, $bookingaccount_number = null) {//The function/f
 
 }
 
-function contact_form(){ //Function to let public users contact the business
-    echo'<h2>Contact Us</h2><br>
-    <p>
-This is an email link:
-<a href="mailto:admin@mail.com?Subject=Hello%20I%20would%20like%20to%20inquire%20about" target="_top">Email Us Here</a>
-</p>';
-}
-
 Bookings_CRUD();
 
 ?>
