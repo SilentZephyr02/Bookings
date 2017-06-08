@@ -230,24 +230,23 @@ function WAD_plugin_menu_includes() {
         contact_form();
     }
     else{
-        echo'<h2>Bookings Overview</h2></br>';
+        echo'<h2><a href="?page=Bookings">Bookings Overview</a></h2>';
         include('CRUD/Bookings.php');
         Bookings_list();
 
-        echo'<h2>Accounts Overview</h2></br>';
+        echo'<h2><a href="?page=Accounts">Accounts Overview</a></h2>';
         include('CRUD/Accounts.php');
         Account_list();
 
-        echo'<h2>Rooms Overview</h2></br>';
+        echo'<h2><a href="?page=Rooms">Rooms Overview</a></h2>';
         include('CRUD/Room.php');
         Room_list();
     }
  }
 
  function contact_form(){ //Function to let public users contact the business
-    echo'<h2>Contact Us</h2></br>';
-
-    echo '<form name="Contact" method="post">
+    echo'<h2>Contact Us</h2>
+    <form name="Contact" method="post">
     <p>Subject<br />
     <input type="text" name="subject" size="4" value ="'.$_POST[subject].'" class="large-text" id="subject"/>
     <p>Message<br/>

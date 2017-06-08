@@ -1,10 +1,6 @@
 <?php
 //=======================================================================================
 function Accounts_CRUD() {// the CRUD function for the accounts including a switch statement for the different commands
-    echo '<h3>Contents of the POST data</h3>';
-    pr($_POST);
-    echo '<h3>Contents of the REQUEST data</h3>';
-    pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
         <h2>Accounts <a href="?page=Accounts&command=new" class="add-new-h2">Add New</a></h2>

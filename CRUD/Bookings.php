@@ -2,10 +2,6 @@
 //=======================================================================================
 function Bookings_CRUD(){ // the CRUD function for the bookings including a switch statement for the different commands
     echo '<h3>Bookings Page</h3>';
-    echo '<h3>Contents of the POST data</h3>';
-    pr($_POST);
-    echo '<h3>Contents of the REQUEST data</h3>';
-    pr($_REQUEST);
     echo '<div id="msg" style="overflow: auto"></div>
         <div class="wrap">
         <h2>Bookings <a href="?page=Bookings&command=new" class="add-new-h2">Add New</a></h2>
@@ -127,16 +123,11 @@ function Booking_insert($bookingdata) { //function for adding a new booking into
     $query = "SELECT id, wp_id  FROM ACCOUNTS_TABLE";
     $usersID = $wpdb->get_results($query);
     foreach ($usersID as $wpID){
-        pr($current_user);
-                pr($wpID);
         if($wpID->wp_id==$current_user->ID){
-            $current_userID = $wpID->id;
-               pr($current_userID);
-                
+            $current_userID = $wpID->id;         
         }
     }
  
-    pr($bookingdata);
     $date = date('Y-m-d');
 
     $wpdb->insert( 'BOOKINGS_TABLE',
